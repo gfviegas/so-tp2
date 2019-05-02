@@ -21,11 +21,10 @@ int main(int argc, const char * argv[]) {
     int programMode = NORMAL_MODE;
 
     for (int i = 0; i < argc; i++)
-        if (strcmp(argv[i], "-a") == 0) programMode = DEBUG_MODE;
+        if (strcmp(argv[i], "-d") == 0) programMode = DEBUG_MODE;
 
 
 	printHeader(programMode);
-
 	printf("\n");
     return 0;
 }
