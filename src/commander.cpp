@@ -1,5 +1,4 @@
 #import "Comander.hpp"
-inc
 
 // Constructor
 Commander::Commander(arguments) {
