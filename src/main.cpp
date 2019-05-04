@@ -8,23 +8,23 @@
 #define NORMAL_MODE 0
 #define DEBUG_MODE 1
 
-#include <stdio.h>
-#include <string.h>
+using namespace std;
 
-#include "util/logger.h"
-#include "util/interface.h"
+#include "util/logger.hpp"
 
 int main(int argc, const char * argv[]) {
 	clearOutput();
 
+
+	cout << "Teste" << endl;
+
+	printLine();
+
     // Modo default é o modo normal
-    int programMode = NORMAL_MODE;
+    // int programMode = NORMAL_MODE;
 
-    for (int i = 0; i < argc; i++)
-        if (strcmp(argv[i], "-d") == 0) programMode = DEBUG_MODE;
+    // for (int i = 0; i < argc; i++)
+        // if (strcmp(argv[i], "-d") == 0) programMode = DEBUG_MODE;
 
-
-	printHeader(programMode);
-	printf("\n");
     return 0;
 }

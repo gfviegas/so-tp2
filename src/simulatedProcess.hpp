@@ -1,6 +1,9 @@
-#ifndef simulatedProcess_h
-#define simulatedProcess_h
+#ifndef simulatedProcess_hpp
+#define simulatedProcess_hpp
 
+#include <string>
+
+using namespace std;
 class SimulatedProcess {
 	private:
 		/* data */
@@ -9,12 +12,12 @@ class SimulatedProcess {
 		int id;
 		int pc;
 		int n;
-		String program;
+		string program;
 
-		SimulatedProcess (arguments);
+		SimulatedProcess (void);
 		virtual ~SimulatedProcess ();
 
-		String readComand(void);
+		string readComand(void);
 		void set(int value);
 		void add(int value);
 		void sub(int value);
@@ -24,4 +27,4 @@ class SimulatedProcess {
 		void read(void);
 };
 
-#endif /* simulatedProcess_h */
+#endif /* simulatedProcess_hpp */

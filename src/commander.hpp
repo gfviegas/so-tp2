@@ -5,26 +5,37 @@
  * @author
  */
 
-#ifndef commander_h
-#define commander_h
+#ifndef commander_hpp
+#define commander_hpp
+
+#include <stdlib.h>
+#include <sys/types.h>
+#include <string>
+#include <unistd.h>
+
+#include "processManager.hpp"
 
 using namespace std;
-#include <string.h>
+typedef enum InputSource { STDIO, EXTERNAL_FILE } InputSource;
 
 class Commander {
 	private:
+		InputSource inputSource;
+
 	public:
-		// [pipe description]
-		Pipe pipe;
+		// File Description - para o Pipe
+		int fd[2];
+
+		pid_t pid;
+
 		// [processManager description]
 		ProcessManager processManager;
 
 		/**
 		 * [Commander  description]
-		 * @param arguments [description]
+		 * @param void [description]
 		 */
-		Commander (arguments);
-		virtual ~Commander ();
+		Commander (InputSource is);
 
 		/**
 		 * [menu description]
@@ -42,6 +53,8 @@ class Commander {
 		 * @return  [description]
 		 */
 		string leEntrada(void);
+
+		void sendDataPipe(string data);
 };
 
-#endif /* commander_h */
+#endif /* commander_hpp */

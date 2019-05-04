@@ -1,5 +1,7 @@
-#ifndef pcbTable_h
-#define pcbTable_h
+#ifndef pcbTable_hpp
+#define pcbTable_hpp
+
+#include "simulatedProcess.hpp"
 
 class PcbTable {
 	private:
@@ -13,8 +15,8 @@ class PcbTable {
 		int initTime;
 		int cpuTime;
 
-		PcbTable (arguments);
+		PcbTable (void);
 		virtual ~PcbTable ();
 };
 
-#endif /* pcbTable_h */
+#endif /* pcbTable_hpp */

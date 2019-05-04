@@ -1,0 +1,5 @@
+1. S n: Define o valor da variável inteira para n, onde n é um inteiro. 2. A n: Adiciona n ao valor da variável inteira, onde n é um inteiro. 3. D n: Subtrai n do valor da variável inteira, onde n é um inteiro.
+4. B: Bloqueia esse processo simulado.
+5. E: Termina esse processo simulado.
+6. F n: Cria um novo processo simulado. O novo processo (simulado) é uma cópia exata do processo pai (simulado). O novo processo (simulado) executa a partir da instrução, imediatamente após essa instrução F, enquanto o processo pai (simulado) continua a sua execução n instruções, depois da próxima instrução.
+7. R nome_do_arquivo: Substitui o programa do processo simulado pelo programa no arquivo nome_do_arquivo e define o contador de programa para a primeira instrução desse novo programa.

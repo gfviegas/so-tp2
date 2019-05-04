@@ -1,13 +1,13 @@
-#ifndef pcbTableList_h
-#define pcbTableList_h
+#ifndef pcbTableList_hpp
+#define pcbTableList_hpp
 
 class PcbTableList {
 	private:
 		/* data */
 
 	public:
-		PcbTableList (arguments);
+		PcbTableList (void);
 		virtual ~PcbTableList ();
 };
 
-#endif /* pcbTableList_h */
+#endif /* pcbTableList_hpp */

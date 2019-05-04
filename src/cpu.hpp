@@ -1,17 +1,17 @@
-#ifndef cpu_h
-#define cpu_h
+#ifndef cpu_hpp
+#define cpu_hpp
 
 class Cpu {
 	private:
 
 	public:
-		SimulatedProcess* process;
+		// SimulatedProcess* process;
 		int processTime;
 		int executedTime;
 
 
-		Cpu (arguments);
+		Cpu (void);
 		virtual ~Cpu ();
 };
 
-#endif /* cpu_h */
+#endif /* cpu_hpp */
