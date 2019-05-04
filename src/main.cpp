@@ -8,6 +8,8 @@
 #define NORMAL_MODE 0
 #define DEBUG_MODE 1
 
+#include "processManager.hpp"
+
 using namespace std;
 
 #include "util/logger.hpp"
@@ -15,8 +17,12 @@ using namespace std;
 int main(int argc, const char * argv[]) {
 	clearOutput();
 
+    SimulatedProcess process;
 
-	cout << "Teste" << endl;
+    process.set(8);
+    process.add(2);
+
+	cout << "BORA BOTAR PRA QUEBRAR!!" << endl;
 
 	printLine();
 

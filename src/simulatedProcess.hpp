@@ -1,9 +1,9 @@
 #ifndef simulatedProcess_hpp
 #define simulatedProcess_hpp
-
 #include <string>
 
 using namespace std;
+
 class SimulatedProcess {
 	private:
 		/* data */
