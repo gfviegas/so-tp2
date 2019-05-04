@@ -9,10 +9,20 @@
 
 #include "processManager.hpp"
 
-ProcessManager::ProcessManager() {
-
+ProcessManager::ProcessManager(void) {
 }
 
-// ProcessManager::init(void) {
-//
-// }
+void ProcessManager::init(void) {
+}
+
+void ProcessManager::unblock(void) {
+}
+
+void ProcessManager::print(void) {
+}
+
+void ProcessManager::endExecution(void) {
+}
+
+void ProcessManager::execute(void) {
+}

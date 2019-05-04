@@ -29,7 +29,6 @@ class ProcessManager {
         // Reporter reporter;
 
         ProcessManager (void);
-        virtual ~ProcessManager ();
 
         void init(void);
         void unblock(void);

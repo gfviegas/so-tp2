@@ -7,7 +7,6 @@ class PcbTableList {
 
 	public:
 		PcbTableList (void);
-		virtual ~PcbTableList ();
 };
 
 #endif /* pcbTableList_hpp */

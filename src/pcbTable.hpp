@@ -16,7 +16,6 @@ class PcbTable {
 		int cpuTime;
 
 		PcbTable (void);
-		virtual ~PcbTable ();
 };
 
 #endif /* pcbTable_hpp */

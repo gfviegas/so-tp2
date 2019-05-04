@@ -15,7 +15,6 @@ class SimulatedProcess {
 		string program;
 
 		SimulatedProcess (void);
-		virtual ~SimulatedProcess ();
 
 		string readComand(void);
 		void set(int value);

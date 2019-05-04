@@ -9,9 +9,7 @@ class Cpu {
 		int processTime;
 		int executedTime;
 
-
 		Cpu (void);
-		virtual ~Cpu ();
 };
 
 #endif /* cpu_hpp */

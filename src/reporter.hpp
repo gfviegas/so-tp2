@@ -9,7 +9,6 @@ class Reporter {
 
 	public:
 		Reporter (void);
-		virtual ~Reporter ();
 
 		void print(ProcessManager pm);
 };
