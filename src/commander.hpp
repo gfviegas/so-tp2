@@ -14,10 +14,10 @@
 #include <unistd.h>
 
 #include "processManager.hpp"
+#include "interfaces/commanderInterface.hpp"
+#include "interfaces/inputSource.hpp"
 
 using namespace std;
-typedef enum InputSource { STDIO, EXTERNAL_FILE } InputSource;
-
 class Commander {
 	private:
 		InputSource inputSource;

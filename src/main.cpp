@@ -9,22 +9,23 @@
 #define DEBUG_MODE 1
 
 #include "processManager.hpp"
+#include "commander.hpp"
+#include "interfaces/commanderInterface.hpp"
+#include "util/logger.hpp"
 
 using namespace std;
-
-#include "util/logger.hpp"
 
 int main(int argc, const char * argv[]) {
 	clearOutput();
 
-    SimulatedProcess process;
-
+	SimulatedProcess process;
     process.set(8);
     process.add(2);
 
-	cout << "BORA BOTAR PRA QUEBRAR!!" << endl;
+	CommanderInterface::welcome();
+	InputSource is = CommanderInterface::chooseSource();
 
-	printLine();
+	Commander commander(is);
 
     // Modo default é o modo normal
     // int programMode = NORMAL_MODE;

@@ -22,3 +22,14 @@ void printLine(void) {
 
 	cout << reset << endl;
 }
+
+void promptArrow(void) {
+	cout << yellow << " > " << reset;
+}
+
+void printError(exception& e) {
+	cout << red << "Erro: " << e.what() << endl;
+}
+void printError(string e) {
+	cout << red << "Erro: " << e << endl;
+}
