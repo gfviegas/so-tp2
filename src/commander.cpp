@@ -22,9 +22,10 @@ Commander::Commander(InputSource is) {
 		close(fd[1]);
 
 		// TODO: Arrumar esse codigo pra se tornar o PM
-		// string data;
 		// // Lendo o que foi escrito no pipe
-		// read(fd[0], data, sizeof(data));
+		char codeReceived;
+		read(fd[0], &codeReceived, 1);
+		cout << endl << yellow << "[DEBUG] O PIPE RECEBEU O DADO: " << codeReceived << endl;
 
 	} else {
 		// Se não, estamos no pai e o PID do filho está salvo na variável pid.
@@ -33,7 +34,10 @@ Commander::Commander(InputSource is) {
 
 
 		if (inputSource == STDIO) {
-			// TODO: Criar interface pra leitura stdio
+			CommanderInterface::commandsInstructions();
+
+			char code = CommanderInterface::readCommandFromStdIO();
+			write(fd[1], &code, 1);
 		} else if (inputSource == EXTERNAL_FILE) {
 			// TODO: Criar interface pra leitura do arquivo
 		}

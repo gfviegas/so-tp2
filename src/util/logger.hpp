@@ -44,4 +44,10 @@ void printLine(void);
  */
 void promptArrow(void);
 
+/**
+ * Imprime uma linha auxiliar especial pra gerenciamento de erros
+ */
+void printError(exception& e);
+void printError(string e);
+
 #endif /* logger_hpp */

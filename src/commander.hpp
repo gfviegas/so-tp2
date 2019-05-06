@@ -14,6 +14,7 @@
 #include <unistd.h>
 
 #include "processManager.hpp"
+#include "interfaces/commanderInterface.hpp"
 #include "interfaces/inputSource.hpp"
 
 using namespace std;
