@@ -22,3 +22,7 @@ void printLine(void) {
 
 	cout << reset << endl;
 }
+
+void promptArrow(void) {
+	cout << yellow << " > " << reset;
+}
