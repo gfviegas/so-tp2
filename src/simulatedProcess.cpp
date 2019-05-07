@@ -1,10 +1,46 @@
 #include "simulatedProcess.hpp"
 
 // Constructor
-SimulatedProcess::SimulatedProcess(void)
+SimulatedProcess::SimulatedProcess()
 {
-    pc = 0;
+    id = ++COUNT_ID;
+    pc = -1;
     n = 0;
+    blocked = false;
+}
+
+SimulatedProcess::SimulatedProcess(string rawProgram)
+{
+    SimulatedProcess();
+
+    // Vector of string to save tokens
+    vector<string> tokens;
+
+    // stringstream class check1
+    stringstream check1(rawProgram);
+
+    string intermediate;
+
+    // Tokenizing w.r.t. space ' '
+    while (getline(check1, intermediate, '\n'))
+    {
+        tokens.push_back(intermediate);
+    }
+
+    program = new string[tokens.size()];
+
+    // Printing the token vector
+    for (int i = 0; i < tokens.size(); i++)
+        program[i] = tokens[i];
+}
+
+/**
+ * Seta um novo programa no sistema
+ * @param {String} p programa do processo simulado
+ */
+void SimulatedProcess::setProgram(string *p)
+{
+    program = p;
 }
 
 /**
@@ -14,9 +50,7 @@ SimulatedProcess::SimulatedProcess(void)
 string SimulatedProcess::readComand(void)
 {
     pc++;
-
-    // deve retornar o program na posição do pc
-    return "instrução do programa";
+    return program[pc];
 }
 
 /**
@@ -47,24 +81,33 @@ void SimulatedProcess::sub(int value)
 }
 
 /**
- * Bloqueia o processo simulado
+ * Bloqueia ou desbloqueia um processo simulado (B)
+ * @param {bool} block bloqueia ou desbloqueia processo simulado
  */
-void SimulatedProcess::block(void)
+void SimulatedProcess::block(bool block)
 {
-    // B
-    // define status do processo simulado como bloqueado (aguardando entrada)
+    blocked = block;
 }
 
-void SimulatedProcess::end(void)
+/**
+ * Encerra o processo simulado passado por parâmetro (E)
+ * @param {SimulatedProcess **} ponteiro duplo de um processo simulado
+ */
+void SimulatedProcess::end(SimulatedProcess **process)
 {
-    // E
-    // finaliza o processo simulado
+    delete *process;
+    *process = NULL;
 }
 
-void SimulatedProcess::fork(void)
+/**
+ * Cria um novo processo simulado a partir do processo pai (F)
+ * @ returns {SimulatedProcess*} processo simulado
+ */
+SimulatedProcess *SimulatedProcess::fork(void)
 {
-    // F
-    // deve criar um novo processo simulado idêntico ao processo pai
+    SimulatedProcess *forkedProcess = new SimulatedProcess;
+    forkedProcess->setProgram(program);
+    return forkedProcess;
 }
 
 void SimulatedProcess::read(void)
