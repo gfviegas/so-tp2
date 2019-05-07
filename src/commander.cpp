@@ -29,38 +29,41 @@ Commander::Commander(InputSource is)
 		// TODO: Arrumar esse codigo pra se tornar o PM
 		// // Lendo o que foi escrito no pipe
 		char codeReceived;
-		read(fd[0], &codeReceived, 1);
-		cout << endl
-			 << yellow << "[DEBUG] O PIPE RECEBEU O DADO: " << codeReceived << endl;
-	}
-	else
-	{
+		int queueSize;
+
+		// Lendo o tamanho da fila
+		read(fd[0], &queueSize, sizeof(int));
+
+		for (int i = 0; i < queueSize; i++) {
+			read(fd[0], &codeReceived, sizeof(char));
+			cout << endl << yellow << "[DEBUG PM] Lendo código: " << codeReceived << endl;
+		}
+	} else {
 		// Se não, estamos no pai e o PID do filho está salvo na variável pid.
 		// No pai a gente vai escrever, então vamos fechar a *leitura* do pipe.
 		close(fd[0]);
+		queue<char> codesQueue;
+		char currentCode;
+		int queueSize;
 
 		if (inputSource == STDIO)
 		{
 			CommanderInterface::commandsInstructions();
-
-			char code;
-			// Lê os comandos do STDIO até vir um T.
-			do
-			{
-				code = CommanderInterface::readCommandFromStdIO();
-				write(fd[1], &code, 1);
-			} while (code != 'T');
+			codesQueue = CommanderInterface::readCommandFromStdIO();
+		} else if (inputSource == EXTERNAL_FILE) {
+			// Pega a fila de codigos do arquivo e escreve a fila no pipe.
+			codesQueue = CommanderInterface::readCommandFromFile();
 		}
-		else if (inputSource == EXTERNAL_FILE)
-		{
-			// Pega a fila de codigos do arquivo e escreve um a um no pipe.
-			queue<char> codesQueue = CommanderInterface::readCommandFromFile();
 
-			while (!codesQueue.empty())
-			{
-				write(fd[1], &(codesQueue.front()), 1);
-				codesQueue.pop();
-			}
+		// Enviando pelo pipe o tamanho da fila
+		queueSize = codesQueue.size();
+		write(fd[1], &queueSize, sizeof(int));
+
+		// Enviando a fila, caracter por caracter
+		while (!codesQueue.empty()) {
+			currentCode = codesQueue.front();
+			write(fd[1], &currentCode, sizeof(char));
+			codesQueue.pop();
 		}
 	}
 }

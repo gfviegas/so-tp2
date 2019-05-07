@@ -30,11 +30,14 @@ public:
     // Reporter reporter;
 
     ProcessManager(void);
-
-    void unblock(void);
-    void print(void);
-    void endExecution(void);
+    // Q
     void execute(void);
+    // U
+    void unblock(void);
+    // P
+    void print(void);
+    // T
+    void endExecution(void);
 };
 
 #endif /* processManager_hpp */
