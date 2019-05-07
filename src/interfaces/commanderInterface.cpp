@@ -84,3 +84,36 @@ char CommanderInterface::readCommandFromStdIO(void)
 		exit(1);
 	}
 }
+
+queue<char> CommanderInterface::readCommandFromFile(void) {
+	clearOutput();
+	cout << cyan << "[COMMANDER] Iniciando leitura de comandos por arquivo." << endl;
+	cout << green << "Digite o caminho do arquivo de entrada." << endl;
+
+	char code;
+	bool alreadyRan = false;
+	string filePath;
+	ifstream inputFile;
+	queue<char> codesQueue;
+
+	try {
+		do {
+			if (alreadyRan) cout << red << "Arquivo inválido ou não encontrado!" << reset << endl;
+			promptArrow();
+			cin >> filePath;
+			cout << reset << endl;
+			alreadyRan = true;
+
+			inputFile.open(filePath);
+		} while (!inputFile.is_open());
+
+
+		while (inputFile >> code) {
+			codesQueue.push(code);
+		}
+
+	} catch (exception& e) {
+		printError("Programa encerrado inesperadamente");
+		exit(1);
+	}
+}

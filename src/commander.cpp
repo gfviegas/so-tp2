@@ -43,12 +43,24 @@ Commander::Commander(InputSource is)
 		{
 			CommanderInterface::commandsInstructions();
 
-			char code = CommanderInterface::readCommandFromStdIO();
-			write(fd[1], &code, 1);
+			char code;
+			// Lê os comandos do STDIO até vir um T.
+			do
+			{
+				code = CommanderInterface::readCommandFromStdIO();
+				write(fd[1], &code, 1);
+			} while (code != 'T');
 		}
 		else if (inputSource == EXTERNAL_FILE)
 		{
-			// TODO: Criar interface pra leitura do arquivo
+			// Pega a fila de codigos do arquivo e escreve um a um no pipe.
+			queue<char> codesQueue = CommanderInterface::readCommandFromFile();
+
+			while (!codesQueue.empty())
+			{
+				write(fd[1], &(codesQueue.front()), 1);
+				codesQueue.pop();
+			}
 		}
 	}
 }

@@ -12,6 +12,7 @@
 #include <sys/types.h>
 #include <string>
 #include <unistd.h>
+#include <queue>
 
 #include "processManager.hpp"
 #include "interfaces/commanderInterface.hpp"
