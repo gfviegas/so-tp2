@@ -31,10 +31,14 @@ class ProcessManager {
         ProcessManager (void);
 
         void init(void);
+		// Q
+		void execute(void);
+		// U
         void unblock(void);
+		// P
         void print(void);
+		// T
         void endExecution(void);
-        void execute(void);
 };
 
 #endif /* processManager_hpp */

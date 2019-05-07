@@ -42,27 +42,32 @@ void CommanderInterface::commandsInstructions(void) {
 }
 
 bool CommanderInterface::isCodeValid(char code) {
-	return (code == 'Q' || code == 'U' || code == 'P' || code == 'T');
+	bool condition = (code == 'Q' || code == 'U' || code == 'P' || code == 'T');
+	if (!condition) cout << red << "Comando inválido! Tente novamente." << reset << endl;
+	return condition;
 }
 
-char CommanderInterface::readCommandFromStdIO(void) {
+queue<char> CommanderInterface::readCommandFromStdIO(void) {
 	char code;
-	bool alreadyRan = false;
+	queue<char> codesQueue;
 
 	try {
-		do {
-			if (alreadyRan) cout << red << "Comando inválido! Tente novamente." << reset << endl;
-			promptArrow();
-			cin >> code;
-			code = toupper(code);
-			alreadyRan = true;
-		} while (!isCodeValid(code));
 
-		return code;
+		do {
+			do {
+				promptArrow();
+				cin >> code;
+				code = toupper(code);
+			} while (!isCodeValid(code));
+
+			codesQueue.push(code);
+		} while (code != 'T');
 	} catch (exception& e) {
 		printError("Programa encerrado inesperadamente");
 		exit(1);
 	}
+
+	return codesQueue;
 }
 
 queue<char> CommanderInterface::readCommandFromFile(void) {
@@ -96,4 +101,6 @@ queue<char> CommanderInterface::readCommandFromFile(void) {
 		printError("Programa encerrado inesperadamente");
 		exit(1);
 	}
+
+	return codesQueue;
 }

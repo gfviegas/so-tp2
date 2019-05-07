@@ -17,7 +17,7 @@ class CommanderInterface {
 		static void welcome(void);
 		static void commandsInstructions(void);
 		static InputSource chooseSource(void);
-		static char readCommandFromStdIO(void);
+		static queue<char> readCommandFromStdIO(void);
 		static queue<char> readCommandFromFile(void);
 };
 
