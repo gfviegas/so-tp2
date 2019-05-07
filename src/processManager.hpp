@@ -12,29 +12,30 @@
 
 #include "cpu.hpp"
 #include "pcbTable.hpp"
-#include "pcbTableList.hpp"
+#include "simulatedProcess.hpp"
 // #include "reporter.hpp"
 
 using namespace std;
 
-class ProcessManager {
-    private:
-    public:
-        PcbTableList blockedState;
-        PcbTableList readyState;
-        PcbTable runningState;
-        int time;
-        Cpu cpu;
-        PcbTable pcbTable;
-        // Reporter reporter;
+class ProcessManager
+{
+private:
+public:
+    // list<SimulatedProcess> blockedState;
+    // PcbTableList readyState;
+    // PcbTable runningState;
+    int time;
+    Cpu cpu;
+    PcbTable pcbTable;
+    // Reporter reporter;
 
-        ProcessManager (void);
+    ProcessManager(void);
 
-        void init(void);
-        void unblock(void);
-        void print(void);
-        void endExecution(void);
-        void execute(void);
+    void init(void);
+    void unblock(void);
+    void print(void);
+    void endExecution(void);
+    void execute(void);
 };
 
 #endif /* processManager_hpp */

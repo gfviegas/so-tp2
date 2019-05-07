@@ -8,12 +8,7 @@ class PcbTable {
 		/* data */
 
 	public:
-		SimulatedProcess *process;
-		int masterId;
-		int priority;
-		int state;
-		int initTime;
-		int cpuTime;
+		list<SimulatedProcess> process;
 
 		PcbTable (void);
 };

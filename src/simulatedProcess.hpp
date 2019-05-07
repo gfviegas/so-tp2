@@ -1,10 +1,14 @@
 #ifndef simulatedProcess_hpp
 #define simulatedProcess_hpp
 
-#include <string>
 #include "bits/stdc++.h"
 
-static int COUNT_ID = 0;
+static int COUNT_ID = -1;
+typedef enum STATE
+{
+	BLOCKED,
+	UNBLOCKED
+} State;
 
 using namespace std;
 
@@ -14,24 +18,29 @@ private:
 	int id;
 	int pc;
 	int n;
-	bool blocked;
 	string *program;
 
-	void setProgram(string *p);
+	int masterId;
+	int priority;
+	State state;
+	int initTime;
+	int cpuTime;
+
+	void setProgram(int masterId, string *program, int pc);
 	void init();
+	void set(int value);
+	void add(int value);
+	void sub(int value);
+	void block();
+	void end(SimulatedProcess **process);
+	SimulatedProcess *fork(int n);
+	void read(string file);
 
 public:
 	SimulatedProcess();
 	SimulatedProcess(string rawProgram);
 
-	string readComand(void);
-	void set(int value);
-	void add(int value);
-	void sub(int value);
-	void block(bool block);
-	void end(SimulatedProcess **process);
-	SimulatedProcess *fork(void);
-	void read(void);
+	void readComand(void);
 };
 
 #endif /* simulatedProcess_hpp */
