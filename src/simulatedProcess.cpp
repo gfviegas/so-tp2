@@ -1,56 +1,108 @@
 #include "simulatedProcess.hpp"
 
-// Constructor
-SimulatedProcess::SimulatedProcess()
-{
-    id = ++COUNT_ID;
-    pc = -1;
-    n = 0;
-    blocked = false;
-}
+#include "util/logger.hpp"
 
-SimulatedProcess::SimulatedProcess(string rawProgram)
+string *explode(string text, char delimiter)
 {
-    SimulatedProcess();
-
     // Vector of string to save tokens
     vector<string> tokens;
 
     // stringstream class check1
-    stringstream check1(rawProgram);
+    stringstream check1(text);
 
     string intermediate;
 
     // Tokenizing w.r.t. space ' '
-    while (getline(check1, intermediate, '\n'))
+    while (getline(check1, intermediate, delimiter))
     {
         tokens.push_back(intermediate);
     }
 
-    program = new string[tokens.size()];
+    string *program = new string[tokens.size()];
 
     // Printing the token vector
     for (int i = 0; i < tokens.size(); i++)
         program[i] = tokens[i];
+
+    return program;
+}
+
+/**
+ * Inicializa um processo simulado
+ */
+void SimulatedProcess::init()
+{
+    id = ++COUNT_ID;
+    masterId = -1;
+    pc = -1;
+    n = 0;
+    state = UNBLOCKED;
+    initTime = 0;
+    cpuTime = 0;
+}
+
+// Constructor
+SimulatedProcess::SimulatedProcess()
+{
+    init();
+}
+
+SimulatedProcess::SimulatedProcess(string rawProgram)
+{
+    init();
+    program = explode(rawProgram, '\n');
 }
 
 /**
  * Seta um novo programa no sistema
  * @param {String} p programa do processo simulado
  */
-void SimulatedProcess::setProgram(string *p)
+void SimulatedProcess::setProgram(int masterId, string *program, int pc)
 {
-    program = p;
+    masterId = masterId;
+    program = program;
+    pc = pc;
 }
 
 /**
  * Incrementa PC e lê um comando do processo simulado
  * @return {String} comando na posição do PC
  */
-string SimulatedProcess::readComand(void)
+void SimulatedProcess::readComand(void)
 {
     pc++;
-    return program[pc];
+
+    string *command = explode(program[pc], ' ');
+
+    switch (command[0].at(0)) {
+	    case 'S':
+	        int n = atoi(command[1].c_str());
+	        set(n);
+	        break;
+	    case 'A':
+	        int n = atoi(command[1].c_str());
+	        add(n);
+	        break;
+	    case 'D':
+	        int n = atoi(command[1].c_str());
+	        sub(n);
+	        break;
+	    case 'B':
+	        block();
+	        break;
+	    case 'E':
+	        break;
+	    case 'F':
+	        int n = atoi(command[1].c_str());
+	        fork(n);
+	        // adicionar a lista de processos
+	        break;
+	    case 'R':
+	        read(command[1]);
+	        break;
+	    default:
+	        break;
+    }
 }
 
 /**
@@ -84,9 +136,11 @@ void SimulatedProcess::sub(int value)
  * Bloqueia ou desbloqueia um processo simulado (B)
  * @param {bool} block bloqueia ou desbloqueia processo simulado
  */
-void SimulatedProcess::block(bool block)
+void SimulatedProcess::block()
 {
-    blocked = block;
+    state = BLOCKED;
+
+    // adicionar processo a lista de bloqueados
 }
 
 /**
@@ -103,14 +157,18 @@ void SimulatedProcess::end(SimulatedProcess **process)
  * Cria um novo processo simulado a partir do processo pai (F)
  * @ returns {SimulatedProcess*} processo simulado
  */
-SimulatedProcess *SimulatedProcess::fork(void)
+SimulatedProcess *SimulatedProcess::fork(int n)
 {
     SimulatedProcess *forkedProcess = new SimulatedProcess;
-    forkedProcess->setProgram(program);
+    forkedProcess->setProgram(id, program, pc + 1);
+
+    // pula instruções do processo pai
+    pc += n;
+
     return forkedProcess;
 }
 
-void SimulatedProcess::read(void)
+void SimulatedProcess::read(string file)
 {
     // R
     // deve substituir o conteúdo do program pelo arquivo lido

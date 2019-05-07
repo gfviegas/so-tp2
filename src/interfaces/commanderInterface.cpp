@@ -1,7 +1,9 @@
 #include "commanderInterface.hpp"
 
-void CommanderInterface::welcome(void) {
-	cout << endl << endl;
+void CommanderInterface::welcome(void)
+{
+	cout << endl
+		 << endl;
 	printLine();
 	cout << blue << "_____                      _   _ _           _       \n| ___ \\                    | | | (_)         | |\n| |_/ / ___ _ __ ___ ______| | | |_ _ __   __| | ___\n| ___ \\/ _ \\ '_ ` _ \\______| | | | | '_ \\ / _` |/ _ \\\n| |_/ /  __/ | | | | |     \\ \\_/ / | | | | (_| | (_) |\n\\____/ \\___|_| |_| |_|      \\___/|_|_| |_|\\__,_|\\___/\n";
 	cout << yellow << "\n \t Ao TP 2 - SO!" << reset << endl;
@@ -9,7 +11,8 @@ void CommanderInterface::welcome(void) {
 	printLine();
 }
 
-InputSource CommanderInterface::chooseSource(void) {
+InputSource CommanderInterface::chooseSource(void)
+{
 	int choice = 0;
 
 	cout << green << "Escolha qual a forma de entrada dos dados." << endl;
@@ -17,22 +20,32 @@ InputSource CommanderInterface::chooseSource(void) {
 	cout << green << "2 - Arquivo de Entrada" << endl;
 	cout << green << "0 - Cancelar" << endl;
 
-	try {
+	try
+	{
 		promptArrow();
 		cin >> choice;
 
-		switch (choice) {
-			case 1: return STDIO;
-			case 2: return EXTERNAL_FILE;
-			default: throw invalid_argument("Opção de entrada de dados inválida!");
+		switch (choice)
+		{
+		case 1:
+			return STDIO;
+		case 2:
+			return EXTERNAL_FILE;
+		case 0:
+			exit(0);
+		default:
+			throw invalid_argument("Opção de entrada de dados inválida!");
 		}
-	} catch (exception& e) {
+	}
+	catch (exception &e)
+	{
 		printError(e);
 		exit(1);
 	}
 }
 
-void CommanderInterface::commandsInstructions(void) {
+void CommanderInterface::commandsInstructions(void)
+{
 	clearOutput();
 	cout << cyan << "[COMMANDER] Iniciando leitura de comandos por entrada padrão." << endl;
 	cout << green << "Q - Fim de uma unidade de tempo." << endl;
@@ -52,7 +65,6 @@ queue<char> CommanderInterface::readCommandFromStdIO(void) {
 	queue<char> codesQueue;
 
 	try {
-
 		do {
 			do {
 				promptArrow();
