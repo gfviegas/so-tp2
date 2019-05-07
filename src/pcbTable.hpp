@@ -3,14 +3,16 @@
 
 #include "simulatedProcess.hpp"
 
-class PcbTable {
-	private:
-		/* data */
+class PcbTable
+{
+private:
+	/* data */
 
-	public:
-		list<SimulatedProcess> process;
+public:
+	list<SimulatedProcess> processes;
 
-		PcbTable (void);
+	PcbTable(void);
+	void add(SimulatedProcess process);
 };
 
 #endif /* pcbTable_hpp */

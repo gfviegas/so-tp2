@@ -57,11 +57,11 @@ SimulatedProcess::SimulatedProcess(string rawProgram)
  * Seta um novo programa no sistema
  * @param {String} p programa do processo simulado
  */
-void SimulatedProcess::setProgram(int masterId, string *program, int pc)
+void SimulatedProcess::setProgram(int id, string *p, int programCounter)
 {
-    masterId = masterId;
-    program = program;
-    pc = pc;
+    masterId = id;
+    program = p;
+    pc = programCounter;
 }
 
 /**
@@ -72,20 +72,21 @@ void SimulatedProcess::readComand(void)
 {
     pc++;
 
+    int n;
     string *command = explode(program[pc], ' ');
 
     switch (command[0].at(0))
     {
     case 'S':
-        int n = atoi(command[1].c_str());
+        n = atoi(command[1].c_str());
         set(n);
         break;
     case 'A':
-        int n = atoi(command[1].c_str());
+        n = atoi(command[1].c_str());
         add(n);
         break;
     case 'D':
-        int n = atoi(command[1].c_str());
+        n = atoi(command[1].c_str());
         sub(n);
         break;
     case 'B':
@@ -94,7 +95,7 @@ void SimulatedProcess::readComand(void)
     case 'E':
         break;
     case 'F':
-        int n = atoi(command[1].c_str());
+        n = atoi(command[1].c_str());
         fork(n);
         // adicionar a lista de processos
         break;

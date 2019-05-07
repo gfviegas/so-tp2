@@ -31,7 +31,6 @@ public:
 
     ProcessManager(void);
 
-    void init(void);
     void unblock(void);
     void print(void);
     void endExecution(void);

@@ -9,20 +9,39 @@
 
 #include "processManager.hpp"
 
-ProcessManager::ProcessManager(void) {
+#include "util/logger.hpp"
+
+ProcessManager::ProcessManager(void)
+{
+    ifstream firstProcess;
+    firstProcess.open("init");
+
+    string program = "";
+    char c;
+
+    while (firstProcess >> c)
+    {
+        cout << c << endl;
+        program += c;
+    }
+
+    cout << program << endl;
+
+    firstProcess.close();
 }
 
-void ProcessManager::init(void) {
+void ProcessManager::unblock(void)
+{
 }
 
-void ProcessManager::unblock(void) {
+void ProcessManager::print(void)
+{
 }
 
-void ProcessManager::print(void) {
+void ProcessManager::endExecution(void)
+{
 }
 
-void ProcessManager::endExecution(void) {
-}
-
-void ProcessManager::execute(void) {
+void ProcessManager::execute(void)
+{
 }
