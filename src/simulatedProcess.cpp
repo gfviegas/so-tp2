@@ -1,7 +1,5 @@
 #include "simulatedProcess.hpp"
 
-#include "util/logger.hpp"
-
 string *explode(string text, char delimiter)
 {
     // Vector of string to save tokens

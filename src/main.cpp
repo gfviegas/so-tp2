@@ -15,23 +15,20 @@
 
 using namespace std;
 
-int main(int argc, const char * argv[]) {
-	clearOutput();
+int main(int argc, const char *argv[])
+{
+    clearOutput();
 
-	SimulatedProcess process;
-    process.set(8);
-    process.add(2);
+    CommanderInterface::welcome();
+    InputSource is = CommanderInterface::chooseSource();
 
-	CommanderInterface::welcome();
-	InputSource is = CommanderInterface::chooseSource();
-
-	Commander commander(is);
+    Commander commander(is);
 
     // Modo default é o modo normal
     // int programMode = NORMAL_MODE;
 
     // for (int i = 0; i < argc; i++)
-        // if (strcmp(argv[i], "-d") == 0) programMode = DEBUG_MODE;
+    // if (strcmp(argv[i], "-d") == 0) programMode = DEBUG_MODE;
 
     return 0;
 }

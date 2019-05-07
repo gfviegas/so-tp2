@@ -20,6 +20,7 @@ private:
 	int n;
 	string *program;
 
+	// confirmar esses atributos na estutura correta
 	int masterId;
 	int priority;
 	State state;

@@ -13,21 +13,26 @@
 
 ProcessManager::ProcessManager(void)
 {
-    ifstream firstProcess;
-    firstProcess.open("init");
+    ifstream stream;
+    stream.open("src/init");
 
-    string program = "";
-    char c;
+    string program;
+    char c = stream.get();
 
-    while (firstProcess >> c)
+    while (stream.good())
     {
-        cout << c << endl;
         program += c;
+        c = stream.get();
     }
 
-    cout << program << endl;
+    stream.close();
 
-    firstProcess.close();
+    SimulatedProcess *firstProcess = new SimulatedProcess(program);
+
+    firstProcess->readComand();
+    firstProcess->readComand();
+
+    // enviar processo para CPU, PCBTABLE
 }
 
 void ProcessManager::unblock(void)

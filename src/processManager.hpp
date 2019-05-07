@@ -10,6 +10,8 @@
 #ifndef processManager_hpp
 #define processManager_hpp
 
+#include "bits/stdc++.h"
+
 #include "cpu.hpp"
 #include "pcbTable.hpp"
 #include "simulatedProcess.hpp"
