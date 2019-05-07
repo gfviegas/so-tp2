@@ -18,6 +18,7 @@ private:
 	string *program;
 
 	void setProgram(string *p);
+	void init();
 
 public:
 	SimulatedProcess();

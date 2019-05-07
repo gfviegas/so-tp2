@@ -1,7 +1,11 @@
 #include "simulatedProcess.hpp"
 
-// Constructor
-SimulatedProcess::SimulatedProcess()
+#include "util/logger.hpp"
+
+/**
+ * Inicializa um processo simulado
+ */
+void SimulatedProcess::init()
 {
     id = ++COUNT_ID;
     pc = -1;
@@ -9,9 +13,15 @@ SimulatedProcess::SimulatedProcess()
     blocked = false;
 }
 
+// Constructor
+SimulatedProcess::SimulatedProcess()
+{
+    init();
+}
+
 SimulatedProcess::SimulatedProcess(string rawProgram)
 {
-    SimulatedProcess();
+    init();
 
     // Vector of string to save tokens
     vector<string> tokens;
