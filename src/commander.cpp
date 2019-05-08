@@ -18,16 +18,19 @@ Commander::Commander(InputSource is) {
 		exit(1);
 	} else if (pid == 0) {
 		// Se for 0, estamos no filho!
-		return readCommands();
+		readCommands();
 	} else {
 		// Se não, estamos no pai e o PID do filho está salvo na variável pid.
-		return sendCommands();
+		sendCommands();
 	}
 }
 
 void Commander::readCommands(void) {
 	char codeReceived;
 	int queueSize;
+
+	// Inicia o PM.
+	ProcessManager::init();
 
 	// No filho, vamos apenas ler, então vamos escrever a *escrita* do pipe
 	close(fd[1]);
@@ -39,7 +42,7 @@ void Commander::readCommands(void) {
 	for (int i = 0; i < queueSize; i++) {
 		read(fd[0], &codeReceived, sizeof(char));
 		cout << endl << yellow << "[DEBUG PM] Lendo código: " << codeReceived << endl;
-		pm.runCommand(codeReceived);
+		ProcessManager::runCommand(codeReceived);
 	}
 }
 
@@ -47,7 +50,6 @@ void Commander::sendCommands(void) {
 	queue<char> codesQueue;
 	char currentCode;
 	int queueSize;
-	ProcessManager processManager;
 
 	// No pai a gente vai escrever, então vamos fechar a *leitura* do pipe.
 	close(fd[0]);

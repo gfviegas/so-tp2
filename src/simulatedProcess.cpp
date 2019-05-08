@@ -9,9 +9,6 @@ void SimulatedProcess::init()
     masterId = -1;
     pc = -1;
     n = 0;
-    state = UNBLOCKED;
-    initTime = 0;
-    cpuTime = 0;
 }
 
 // Constructor
@@ -44,7 +41,7 @@ void SimulatedProcess::setProgram(int id, string *p, int programCounter)
 void SimulatedProcess::readComand(void)
 {
     pc++;
-    cpuTime++;
+    // cpuTime++;
 
     int n;
     string *command = explode(program[pc], ' ');
@@ -114,8 +111,7 @@ void SimulatedProcess::sub(int value)
  */
 void SimulatedProcess::block()
 {
-    state = BLOCKED;
-
+    // state = BLOCKED;
     // adicionar processo a lista de bloqueados
 }
 
