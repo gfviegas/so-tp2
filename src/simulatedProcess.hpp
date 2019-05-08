@@ -3,18 +3,16 @@
 
 #include "bits/stdc++.h"
 #include "util/manstring.hpp"
+#include "processManager.hpp"
 
 static int COUNT_ID = -1;
-typedef enum STATE
-{
+typedef enum STATE {
 	BLOCKED,
 	UNBLOCKED
 } State;
 
 using namespace std;
-
-class SimulatedProcess
-{
+class SimulatedProcess {
 private:
 	string *program;
 

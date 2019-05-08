@@ -121,6 +121,7 @@ void SimulatedProcess::block()
  */
 void SimulatedProcess::end(SimulatedProcess **process)
 {
+	ProcessManager::removeProcess((*process)->id);
     delete *process;
     *process = NULL;
 }
@@ -136,6 +137,14 @@ SimulatedProcess *SimulatedProcess::fork(int n)
 
     // pula instruções do processo pai
     pc += n;
+
+	// Cadastra o processo criado na tabela de processos.
+	ProcessManager::insertProcess(
+		forkedProcess->id,
+		&(forkedProcess->pc),
+		forkedProcess->n,
+		forkedProcess->masterId,
+	)
 
     return forkedProcess;
 }

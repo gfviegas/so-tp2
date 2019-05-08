@@ -1,11 +1,10 @@
 #include "pcbTableItem.hpp"
 
 // Constructor
-PcbTableItem::PcbTableItem(int id, int mId, int value, int *programCounter, int initialTime)
-{
+PcbTableItem::PcbTableItem(int id, int mId, int* n, int *programCounter, int initialTime) {
     pid = id;
     masterId = mId;
-    n = value;
+    n = n;
     pc = programCounter;
     priority = 0;
     state = UNBLOCKED;

@@ -12,6 +12,8 @@
 
 #include "bits/stdc++.h"
 
+// #include "<priority_queue>"
+#include "<queue>"
 #include "cpu.hpp"
 #include "pcbTableItem.hpp"
 #include "simulatedProcess.hpp"
@@ -19,36 +21,47 @@
 
 using namespace std;
 
-class ProcessManager
-{
-private:
-	// Q - Fim de uma unidade de tempo
-	static void execute(void);
+class ProcessManager {
+	private:
+		// Q - Fim de uma unidade de tempo
+		static void execute(void);
 
-	// U - Desbloqueia o primeiro processo simulado na fila bloqueada.
-	static void unblock(void);
+		// U - Desbloqueia o primeiro processo simulado na fila bloqueada.
+		static void unblock(void);
 
-	// P - Imprime o estado atual do sistema.
-	static void print(void);
+		// P - Imprime o estado atual do sistema.
+		static void print(void);
 
-	// T - Imprime o tempo médio do ciclo e finaliza o sistema.
-	static void endExecution(void);
+		// T - Imprime o tempo médio do ciclo e finaliza o sistema.
+		static void endExecution(void);
 
-	int time;
-	Cpu cpu;
-	PcbTable pcbTable;
-	list<int> blockedState;
-	list<int> readyState;
-	int runningState;
-	// Reporter reporter;
+		// Unidade de tempo atual.
+		static int time;
 
-	ProcessManager(void);
+		// CPU
+		static Cpu cpu;
 
-public:
-	static void init(void);
-	static void runCommand(char command);
+		// Tabela de Processos.
+		static PcbTable pcbTable;
 
-	static void appendProcess();
+		// Fila dos indices dos processos em pcbTable que estão prontos
+		static queue<int> readyState;
+
+		// Fila dos indices dos processos em pcbTable que estão bloqueados
+		static queue<int> blockedState;
+
+		// Índice do processo em pcbTable que está em execução no momento
+		static int runningState;
+
+		// Construtor
+		ProcessManager(void);
+
+	public:
+		static void init(void);
+		static void runCommand(char command);
+
+		static void insertProcess(PcbTableItem item);
+		static void removeProcess(int pid);
 };
 
 #endif /* processManager_hpp */

@@ -39,6 +39,13 @@ void ProcessManager::init(void) {
     // enviar processo para CPU, PCBTABLE
 }
 
+/**
+ * Q - Fim de uma unidade de tempo
+ * Executa a próxima instrução do processo simulado.
+ */
+void ProcessManager::execute(void) {
+}
+
 void ProcessManager::unblock(void) {
 }
 
@@ -48,8 +55,6 @@ void ProcessManager::print(void) {
 void ProcessManager::endExecution(void) {
 }
 
-void ProcessManager::execute(void) {
-}
 
 void ProcessManager::runCommand(char command) {
 	switch (command) {
@@ -58,5 +63,29 @@ void ProcessManager::runCommand(char command) {
 		case 'P': return print();
 		case 'T': return endExecution();
 		default: throw invalid_argument("Comando inválido encaminhado para o PM");
+	}
+}
+
+void ProcessManager::insertProcess(int pid, int *pc, int *n, int masterId) {
+	PcbTableItem item = new PcbTableItem(
+		pid,
+		masterId,
+		n,
+		pc,
+		time
+	);
+
+	pcbTable.push_back(item);
+}
+
+void ProcessManager::removeProcess(int pid) {
+	int index;
+
+	for (PcbTableItem item : pcbTable) {
+		if (item.id == pid) {
+			int index = distance(pcbTable.begin(), item);
+			pcbTable.erase(index);
+			return;
+		}
 	}
 }

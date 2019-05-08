@@ -2,25 +2,33 @@
 #define pcbTableItem_hpp
 
 #include "simulatedProcess.hpp"
+#include "<vector>"
 
-class PcbTableItem
-{
-private:
-	/* data */
-	int pid;
-	int masterId;
-	int *pc;
-	int n;
-	int priority;
-	STATE state;
-	int initTime;
-	int cpuTime;
+using namespace std;
+class PcbTableItem {
+	private:
+		/* data */
+		int pid;
+		int masterId;
+		int *pc;
+		int *n;
+		int priority;
+		STATE state;
+		int initTime;
+		int cpuTime;
 
-public:
-	//métodos
-	PcbTableItem(int id, int mId, int value, int *programCounter, int initialTime);
+	public:
+		//métodos
+		PcbTableItem(int id, int mId, int *n, int *programCounter, int initialTime);
+
 };
 
-typedef list<PcbTableItem> PcbTable;
+// struct PcbTIComp {
+// 	// Overload do operator pra fila de prioridades
+// 	bool operator<(const PcbTableItem& a, const PcbTableItem& b) {
+// 		return a.priority < b.priority;
+// 	}
+// };
 
+typedef vector<PcbTableItem> PcbTable;
 #endif /* pcbTable_hpp */
