@@ -29,8 +29,8 @@ ProcessManager::ProcessManager(void)
 
     SimulatedProcess *firstProcess = new SimulatedProcess(program);
 
-    firstProcess->readComand();
-    firstProcess->readComand();
+    // firstProcess->readComand();
+    // firstProcess->readComand();
 
     // enviar processo para CPU, PCBTABLE
 }

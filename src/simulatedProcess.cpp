@@ -44,6 +44,7 @@ void SimulatedProcess::setProgram(int id, string *p, int programCounter)
 void SimulatedProcess::readComand(void)
 {
     pc++;
+    cpuTime++;
 
     int n;
     string *command = explode(program[pc], ' ');
