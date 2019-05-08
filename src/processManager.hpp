@@ -21,26 +21,32 @@ using namespace std;
 
 class ProcessManager {
 	private:
-		// Q
-	    void execute(void);
-	    // U
-	    void unblock(void);
-	    // P
-	    void print(void);
-	    // T
-	    void endExecution(void);
+		// Q - Fim de uma unidade de tempo
+	    static void execute(void);
 
-		int time;
-		Cpu cpu;
-		PcbTable pcbTable;
+	    // U - Desbloqueia o primeiro processo simulado na fila bloqueada.
+	    static void unblock(void);
+
+	    // P - Imprime o estado atual do sistema.
+	    static void print(void);
+
+	    // T - Imprime o tempo médio do ciclo e finaliza o sistema.
+	    static void endExecution(void);
+
+		static int time;
+		static Cpu cpu;
+		static PcbTable pcbTable;
 		// list<SimulatedProcess> blockedState;
 		// PcbTableList readyState;
 		// PcbTable runningState;
 		// Reporter reporter;
-	public:
-	    ProcessManager(void);
 
-		runCommand(char command);
+		ProcessManager(void);
+	public:
+		static void init(void);
+		static void runCommand(char command);
+
+		static void appendProcess();
 };
 
 #endif /* processManager_hpp */

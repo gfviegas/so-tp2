@@ -11,8 +11,12 @@
 
 #include "util/logger.hpp"
 
-ProcessManager::ProcessManager(void)
-{
+ProcessManager::ProcessManager(void) {
+}
+
+void ProcessManager::init(void) {
+	cout << green << "init do PM rodou" << reset << endl;
+
     ifstream stream;
     stream.open("src/init");
 
