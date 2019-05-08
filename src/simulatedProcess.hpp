@@ -2,6 +2,7 @@
 #define simulatedProcess_hpp
 
 #include "bits/stdc++.h"
+#include "util/manstring.hpp"
 
 static int COUNT_ID = -1;
 typedef enum STATE

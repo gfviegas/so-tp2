@@ -1,30 +1,5 @@
 #include "simulatedProcess.hpp"
 
-string *explode(string text, char delimiter)
-{
-    // Vector of string to save tokens
-    vector<string> tokens;
-
-    // stringstream class check1
-    stringstream check1(text);
-
-    string intermediate;
-
-    // Tokenizing w.r.t. space ' '
-    while (getline(check1, intermediate, delimiter))
-    {
-        tokens.push_back(intermediate);
-    }
-
-    string *program = new string[tokens.size()];
-
-    // Printing the token vector
-    for (int i = 0; i < tokens.size(); i++)
-        program[i] = tokens[i];
-
-    return program;
-}
-
 /**
  * Inicializa um processo simulado
  */
@@ -155,7 +130,7 @@ void SimulatedProcess::end(SimulatedProcess **process)
 
 /**
  * Cria um novo processo simulado a partir do processo pai (F)
- * @ returns {SimulatedProcess*} processo simulado
+ * @returns {SimulatedProcess*} processo simulado
  */
 SimulatedProcess *SimulatedProcess::fork(int n)
 {
@@ -168,8 +143,33 @@ SimulatedProcess *SimulatedProcess::fork(int n)
     return forkedProcess;
 }
 
+/**
+ * Substitui o programa do processo simulado pelo arquivo passado (R)
+ * @param {string} file arquivo que será lido
+ */
 void SimulatedProcess::read(string file)
 {
-    // R
-    // deve substituir o conteúdo do program pelo arquivo lido
+    ifstream stream;
+    stream.open(file);
+
+    if (!stream.is_open())
+    {
+        cout << "arquivo " << file << " não pode ser lido";
+        return;
+    }
+
+    string rawProgram;
+    char c = stream.get();
+
+    while (stream.good())
+    {
+        rawProgram += c;
+        c = stream.get();
+    }
+
+    stream.close();
+
+    program = explode(rawProgram, '\n');
+
+    pc = -1;
 }
