@@ -19,28 +19,29 @@
 
 using namespace std;
 
-class ProcessManager {
-	private:
-		// Q
-	    void execute(void);
-	    // U
-	    void unblock(void);
-	    // P
-	    void print(void);
-	    // T
-	    void endExecution(void);
+class ProcessManager
+{
+private:
+	// Q
+	void execute(void);
+	// U
+	void unblock(void);
+	// P
+	void print(void);
+	// T
+	void endExecution(void);
 
-		int time;
-		Cpu cpu;
-		//PcbTable pcbTable;
-		// list<SimulatedProcess> blockedState;
-		// PcbTableList readyState;
-		// PcbTable runningState;
-		// Reporter reporter;
-	public:
-	    ProcessManager(void);
+	int time;
+	Cpu cpu;
+	PcbTable pcbTable;
+	list<int> blockedState;
+	list<int> readyState;
+	int runningState;
+	// Reporter reporter;
+public:
+	ProcessManager(void);
 
-		runCommand(char command);
+	void runCommand(char command);
 };
 
 #endif /* processManager_hpp */

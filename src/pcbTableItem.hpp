@@ -19,7 +19,9 @@ public:
 	int cpuTime;
 
 	//métodos
-	PcbTableItem(SimulatedProcess *process);
+	PcbTableItem(SimulatedProcess *process, int initialTime);
 };
+
+typedef list<PcbTableItem> PcbTable;
 
 #endif /* pcbTable_hpp */
