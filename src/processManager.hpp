@@ -13,7 +13,7 @@
 #include "bits/stdc++.h"
 
 #include "cpu.hpp"
-#include "pcbTable.hpp"
+#include "pcbTableItem.hpp"
 #include "simulatedProcess.hpp"
 // #include "reporter.hpp"
 
