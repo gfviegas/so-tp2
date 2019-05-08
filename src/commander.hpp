@@ -1,8 +1,9 @@
 /**
- * Definição da classe Commander: [DESCRICAO]
+ * Definição da classe Commander: Ponto inicial do programa. Cria um novo processo pra o PM e cria um pipe. A partir da leitura dos comandos
+ * do usuário, encaminha para o processo do PM, através do pipe, os comandos lidos.
  *
  * Gustavo Viegas (3026), Bruno Marra (3029) e Heitor Passeado (3055)
- * @author
+ * @author Gustavo Viegas
  */
 
 #ifndef commander_hpp
@@ -21,41 +22,33 @@
 using namespace std;
 class Commander {
 	private:
+		// Tipo de entrada dos dados (STDIO ou EXTERNAL_FILE)
 		InputSource inputSource;
 
-	public:
-		// File Description - para o Pipe
+		// File Description - estrutura para o Pipe
 		int fd[2];
 
+		// pid do processo criado para o Process Manager
 		pid_t pid;
 
-		// [processManager description]
-		ProcessManager processManager;
+		/**
+		 * Método executado apenas para o processo filho do Commander, criado no construtor.
+		 * Lê do pipe e chama o process manager os comandos lidos.
+		 */
+		void readCommands(void);
 
 		/**
-		 * [Commander  description]
-		 * @param void [description]
+		 * Método executado apenas pelo processo pai do Commander, após o fork no construtor.
+		 * Lê os comandos do usuário e os envia pelo pipe para o processo filho.
+		 */
+		void sendCommands(void);
+	public:
+
+		/**
+		 * Construtor da classe Commander - Cria um processo pro PM, um pipe e faz o fluxo de envio de comandos entre os processos.
+		 * @param is Tipo de entrada dos dados escolhida pelo usuário.
 		 */
 		Commander (InputSource is);
-
-		/**
-		 * [menu description]
-		 */
-		void menu(void);
-
-		/**
-		 * [leArquivo description]
-		 * @return  [description]
-		 */
-		string leArquivo(void);
-
-		/**
-		 * [leEntrada description]
-		 * @return  [description]
-		 */
-		string leEntrada(void);
-
-		void sendDataPipe(string data);
 };
 
 #endif /* commander_hpp */

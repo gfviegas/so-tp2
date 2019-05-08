@@ -35,18 +35,24 @@ ProcessManager::ProcessManager(void)
     // enviar processo para CPU, PCBTABLE
 }
 
-void ProcessManager::unblock(void)
-{
+void ProcessManager::unblock(void) {
 }
 
-void ProcessManager::print(void)
-{
+void ProcessManager::print(void) {
 }
 
-void ProcessManager::endExecution(void)
-{
+void ProcessManager::endExecution(void) {
 }
 
-void ProcessManager::execute(void)
-{
+void ProcessManager::execute(void) {
+}
+
+void ProcessManager::runCommand(char command) {
+	switch (command) {
+		case 'Q': return execute();
+		case 'U': return unblock();
+		case 'P': return print();
+		case 'T': return endExecution();
+		default: throw invalid_argument("Comando inválido encaminhado para o PM");
+	}
 }
