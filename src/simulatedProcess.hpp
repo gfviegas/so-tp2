@@ -16,17 +16,9 @@ using namespace std;
 class SimulatedProcess
 {
 private:
-	int id;
-	int pc;
-	int n;
 	string *program;
 
 	// confirmar esses atributos na estutura correta
-	int masterId;
-	int priority;
-	State state;
-	int initTime;
-	int cpuTime;
 
 	void setProgram(int masterId, string *program, int pc);
 	void init();
@@ -39,6 +31,11 @@ private:
 	void read(string file);
 
 public:
+	int id;
+	int pc;
+	int n;
+	int masterId;
+
 	SimulatedProcess();
 	SimulatedProcess(string rawProgram);
 

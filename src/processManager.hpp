@@ -13,7 +13,7 @@
 #include "bits/stdc++.h"
 
 #include "cpu.hpp"
-#include "pcbTable.hpp"
+#include "pcbTableItem.hpp"
 #include "simulatedProcess.hpp"
 // #include "reporter.hpp"
 
@@ -28,7 +28,7 @@ public:
     // PcbTable runningState;
     int time;
     Cpu cpu;
-    PcbTable pcbTable;
+    // PcbTableItem ;
     // Reporter reporter;
 
     ProcessManager(void);
