@@ -35,7 +35,7 @@ class ProcessManager {
 
 		static int time;
 		static Cpu cpu;
-		static PcbTable pcbTable;
+		// static PcbTable pcbTable;
 		// list<SimulatedProcess> blockedState;
 		// PcbTableList readyState;
 		// PcbTable runningState;
