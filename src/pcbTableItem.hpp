@@ -7,8 +7,6 @@ class PcbTableItem
 {
 private:
 	/* data */
-
-public:
 	int pid;
 	int masterId;
 	int *pc;
@@ -18,8 +16,9 @@ public:
 	int initTime;
 	int cpuTime;
 
+public:
 	//métodos
-	PcbTableItem(SimulatedProcess *process, int initialTime);
+	PcbTableItem(int id, int mId, int value, int *programCounter, int initialTime);
 };
 
 typedef list<PcbTableItem> PcbTable;

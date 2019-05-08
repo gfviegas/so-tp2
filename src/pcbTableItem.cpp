@@ -1,11 +1,12 @@
 #include "pcbTableItem.hpp"
 
 // Constructor
-PcbTableItem::PcbTableItem(SimulatedProcess *process, int initialTime)
+PcbTableItem::PcbTableItem(int id, int mId, int value, int *programCounter, int initialTime)
 {
-    pid = process->id;
-    masterId = process->masterId;
-    pc = &process->pc;
+    pid = id;
+    masterId = mId;
+    n = value;
+    pc = programCounter;
     priority = 0;
     state = UNBLOCKED;
     initTime = initialTime;
