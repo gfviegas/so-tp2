@@ -33,6 +33,7 @@ public:
 	int pc;
 	int n;
 	int masterId;
+	int cpuTime;
 
 	SimulatedProcess();
 	SimulatedProcess(string rawProgram);

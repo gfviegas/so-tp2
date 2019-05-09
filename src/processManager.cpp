@@ -44,6 +44,8 @@ void ProcessManager::init(void) {
  * Executa a próxima instrução do processo simulado.
  */
 void ProcessManager::execute(void) {
+	time++;
+	cpu.nextCommand(time);
 }
 
 void ProcessManager::unblock(void) {
@@ -52,9 +54,14 @@ void ProcessManager::unblock(void) {
 void ProcessManager::print(void) {
 }
 
+
 void ProcessManager::endExecution(void) {
 }
 
+void ProcessManager::block(void) {
+	// Verificar tempo de CPU do SP, ver sua prioridade, se nao usou X valores, atualizar priroidade...
+	// Atualizar blockedState, etc.
+}
 
 void ProcessManager::runCommand(char command) {
 	switch (command) {
@@ -66,18 +73,25 @@ void ProcessManager::runCommand(char command) {
 	}
 }
 
-void ProcessManager::insertProcess(int pid, int *pc, int *n, int masterId) {
+void ProcessManager::insertProcess(int pid, int masterId, int *pc, int *n, int *cpuTime) {
 	PcbTableItem item = new PcbTableItem(
 		pid,
 		masterId,
-		n,
 		pc,
+		n,
+		cpuTime,
 		time
 	);
 
 	pcbTable.push_back(item);
+
+	priorityProcessItem ppItem;
+	ppItem.pcbTableIndex = pcbTable.size() - 1;
+	ppItem.priority = &(pcbTable[ppItem.pcbTableIndex].priority);
+	readyState.push_back(ppItem);
 }
 
+// Remove um processo da tabela
 void ProcessManager::removeProcess(int pid) {
 	int index;
 
@@ -86,6 +100,19 @@ void ProcessManager::removeProcess(int pid) {
 			int index = distance(pcbTable.begin(), item);
 			pcbTable.erase(index);
 			return;
+		}
+	}
+
+	// TODO: dependendo da politica de escalonamento, chamar ela pra pegar um proximo processo
+}
+
+// Muda o processo que está rodando na CPU
+void ProcessManager::contextChange(SimulatedProcess *process) {
+	cpu.process = process;
+
+	for (int i = 0; i < pcbTable.size(); i++) {
+		if (pcbTable[i].pid == process->id) {
+			runningState = i;
 		}
 	}
 }

@@ -3,22 +3,20 @@
 /**
  * Inicializa um processo simulado
  */
-void SimulatedProcess::init()
-{
+void SimulatedProcess::init() {
     id = ++COUNT_ID;
     masterId = -1;
     pc = -1;
     n = 0;
+	cpuTime = 0;
 }
 
 // Constructor
-SimulatedProcess::SimulatedProcess()
-{
+SimulatedProcess::SimulatedProcess() {
     init();
 }
 
-SimulatedProcess::SimulatedProcess(string rawProgram)
-{
+SimulatedProcess::SimulatedProcess(string rawProgram) {
     init();
     program = explode(rawProgram, '\n');
 }
@@ -27,8 +25,7 @@ SimulatedProcess::SimulatedProcess(string rawProgram)
  * Seta um novo programa no sistema
  * @param {String} p programa do processo simulado
  */
-void SimulatedProcess::setProgram(int id, string *p, int programCounter)
-{
+void SimulatedProcess::setProgram(int id, string *p, int programCounter) {
     masterId = id;
     program = p;
     pc = programCounter;
@@ -38,11 +35,9 @@ void SimulatedProcess::setProgram(int id, string *p, int programCounter)
  * Incrementa PC e lê um comando do processo simulado
  * @return {String} comando na posição do PC
  */
-void SimulatedProcess::readComand(void)
-{
+void SimulatedProcess::readComand(void) {
     pc++;
-    // cpuTime++;
-
+	cpuTime++;
     int n;
     string *command = explode(program[pc], ' ');
 
@@ -82,8 +77,7 @@ void SimulatedProcess::readComand(void)
  * Seta o valor da variável n para o value passado (S)
  * @param {int} value novo valor
  */
-void SimulatedProcess::set(int value)
-{
+void SimulatedProcess::set(int value) {
     n = value;
 }
 
@@ -91,8 +85,7 @@ void SimulatedProcess::set(int value)
  * Incrementa o valor da variável n pelo value passado (A)
  * @param {int} value novo valor
  */
-void SimulatedProcess::add(int value)
-{
+void SimulatedProcess::add(int value) {
     n += value;
 }
 
@@ -100,8 +93,7 @@ void SimulatedProcess::add(int value)
  * Decrementa o valor da variável n pelo value passado (D)
  * @param {int} value novo valor
  */
-void SimulatedProcess::sub(int value)
-{
+void SimulatedProcess::sub(int value) {
     n -= value;
 }
 
@@ -109,8 +101,7 @@ void SimulatedProcess::sub(int value)
  * Bloqueia ou desbloqueia um processo simulado (B)
  * @param {bool} block bloqueia ou desbloqueia processo simulado
  */
-void SimulatedProcess::block()
-{
+void SimulatedProcess::block() {
     // state = BLOCKED;
     // adicionar processo a lista de bloqueados
 }
@@ -119,8 +110,7 @@ void SimulatedProcess::block()
  * Encerra o processo simulado passado por parâmetro (E)
  * @param {SimulatedProcess **} ponteiro duplo de um processo simulado
  */
-void SimulatedProcess::end(SimulatedProcess **process)
-{
+void SimulatedProcess::end(SimulatedProcess **process) {
 	ProcessManager::removeProcess((*process)->id);
     delete *process;
     *process = NULL;
@@ -130,8 +120,7 @@ void SimulatedProcess::end(SimulatedProcess **process)
  * Cria um novo processo simulado a partir do processo pai (F)
  * @returns {SimulatedProcess*} processo simulado
  */
-SimulatedProcess *SimulatedProcess::fork(int n)
-{
+SimulatedProcess *SimulatedProcess::fork(int n) {
     SimulatedProcess *forkedProcess = new SimulatedProcess;
     forkedProcess->setProgram(id, program, pc + 1);
 
@@ -141,10 +130,11 @@ SimulatedProcess *SimulatedProcess::fork(int n)
 	// Cadastra o processo criado na tabela de processos.
 	ProcessManager::insertProcess(
 		forkedProcess->id,
-		&(forkedProcess->pc),
-		forkedProcess->n,
 		forkedProcess->masterId,
-	)
+		&(forkedProcess->pc),
+		&(forkedProcess->n),
+		&(forkedProcess->cpuTime)
+	);
 
     return forkedProcess;
 }
@@ -153,8 +143,7 @@ SimulatedProcess *SimulatedProcess::fork(int n)
  * Substitui o programa do processo simulado pelo arquivo passado (R)
  * @param {string} file arquivo que será lido
  */
-void SimulatedProcess::read(string file)
-{
+void SimulatedProcess::read(string file) {
     ifstream stream;
     stream.open(file);
 

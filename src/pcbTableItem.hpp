@@ -12,23 +12,26 @@ class PcbTableItem {
 		int masterId;
 		int *pc;
 		int *n;
+		int initTime;
+		int *cpuTime;
+
+		// "Especiais"
 		int priority;
 		STATE state;
-		int initTime;
-		int cpuTime;
-
 	public:
 		//métodos
-		PcbTableItem(int id, int mId, int *n, int *programCounter, int initialTime);
+		PcbTableItem(int pid, int masterId, int *pc, int *n, int *cpuTime, int initTime);
 
 };
 
-// struct PcbTIComp {
-// 	// Overload do operator pra fila de prioridades
-// 	bool operator<(const PcbTableItem& a, const PcbTableItem& b) {
-// 		return a.priority < b.priority;
-// 	}
-// };
+typedef struct priorityProcessItem {
+	int priority;
+	int pcbTableIndex;
+
+	bool operator<(const priorityProcessItem& item) const {
+        return priority < item.priority;
+    }
+} priorityProcessItem;
 
 typedef vector<PcbTableItem> PcbTable;
 #endif /* pcbTable_hpp */

@@ -12,7 +12,7 @@
 
 #include "bits/stdc++.h"
 
-// #include "<priority_queue>"
+#include "<priority_queue>"
 #include "<queue>"
 #include "cpu.hpp"
 #include "pcbTableItem.hpp"
@@ -45,7 +45,7 @@ class ProcessManager {
 		static PcbTable pcbTable;
 
 		// Fila dos indices dos processos em pcbTable que estão prontos
-		static queue<int> readyState;
+		static priority_queue<priorityProcessItem> readyState;
 
 		// Fila dos indices dos processos em pcbTable que estão bloqueados
 		static queue<int> blockedState;
@@ -60,8 +60,11 @@ class ProcessManager {
 		static void init(void);
 		static void runCommand(char command);
 
-		static void insertProcess(PcbTableItem item);
+		static void insertProcess(int pid, int masterId, int *pc, int *n, int *cpuTime);
 		static void removeProcess(int pid);
+
+		// Chamado pelo SP pra atualizar blockedState e atualizar prioridades de acordo com a politica.
+		static void block(void);
 };
 
 #endif /* processManager_hpp */
