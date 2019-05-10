@@ -10,6 +10,13 @@
 #include "processManager.hpp"
 #include "simulatedProcess.hpp"
 
+int ProcessManager::time;
+Cpu ProcessManager::cpu;
+PcbTable ProcessManager::pcbTable;
+priority_queue<PriorityProcessItem> ProcessManager::readyState;
+queue<PriorityProcessItem> ProcessManager::blockedState;
+PriorityProcessItem ProcessManager::runningState;
+
 ProcessManager::ProcessManager(void) {
 }
 

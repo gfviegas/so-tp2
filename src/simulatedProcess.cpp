@@ -13,7 +13,7 @@ void SimulatedProcess::init() {
 }
 
 // Constructor
-SimulatedProcess::SimulatedProcess() {
+SimulatedProcess::SimulatedProcess(void) {
     init();
 }
 

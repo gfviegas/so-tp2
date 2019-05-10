@@ -32,7 +32,7 @@ class SimulatedProcess {
     	int masterId;
     	int cpuTime;
 
-    	SimulatedProcess();
+    	SimulatedProcess(void);
     	SimulatedProcess(string rawProgram);
 
     	void readComand(void);

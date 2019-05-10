@@ -1,7 +1,6 @@
 #include "cpu.hpp"
 
 #include "simulatedProcess.hpp"
-
 // Constructor
 Cpu::Cpu(void) {
 	processTime = 0;
