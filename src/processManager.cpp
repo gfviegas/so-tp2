@@ -100,6 +100,7 @@ void ProcessManager::block(void) {
 }
 
 void ProcessManager::runCommand(char command) {
+    cout << cyan << "[PM] RECEBIDO O COMANDO " << command << reset << endl;
 	switch (command) {
 		case 'Q': return execute();
 		case 'U': return unblock();

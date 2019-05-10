@@ -11,8 +11,7 @@ void CommanderInterface::welcome(void)
 	printLine();
 }
 
-InputSource CommanderInterface::chooseSource(void)
-{
+InputSource CommanderInterface::chooseSource(void) {
 	int choice = 0;
 
 	cout << green << "Escolha qual a forma de entrada dos dados." << endl;
@@ -20,8 +19,7 @@ InputSource CommanderInterface::chooseSource(void)
 	cout << green << "2 - Arquivo de Entrada" << endl;
 	cout << green << "0 - Cancelar" << endl;
 
-	try
-	{
+	try {
 		promptArrow();
 		cin >> choice;
 
@@ -36,9 +34,7 @@ InputSource CommanderInterface::chooseSource(void)
 		default:
 			throw invalid_argument("Opção de entrada de dados inválida!");
 		}
-	}
-	catch (exception &e)
-	{
+	} catch (exception &e) {
 		printError(e);
 		exit(1);
 	}

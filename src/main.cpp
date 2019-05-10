@@ -8,22 +8,21 @@
 #define NORMAL_MODE 0
 #define DEBUG_MODE 1
 
-#include "processManager.hpp"
 #include "commander.hpp"
 #include "interfaces/commanderInterface.hpp"
-#include "util/logger.hpp"
 
 using namespace std;
+int main(int argc, const char *argv[]) {
+    try {
+        clearOutput();
+        CommanderInterface::welcome();
+        InputSource is = CommanderInterface::chooseSource();
 
-int main(int argc, const char *argv[])
-{
-    clearOutput();
-
-    CommanderInterface::welcome();
-    InputSource is = CommanderInterface::chooseSource();
-
-    Commander commander(is);
-
+        Commander commander(is);
+    } catch (exception &e) {
+		printError(e);
+		exit(1);
+	}
     // Modo default é o modo normal
     // int programMode = NORMAL_MODE;
 

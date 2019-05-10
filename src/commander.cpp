@@ -39,7 +39,9 @@ void Commander::readCommands(void) {
 	read(fd[0], &queueSize, sizeof(int));
 
 	// Pra cada elemento na fila, invoca o PM pra orquestrar o comando de fato.
+    cout << endl << yellow << "[DEBUG PM] Tamanho fila: " << queueSize << endl;
 	for (int i = 0; i < queueSize; i++) {
+        cout << "Entrou no segundo for" << endl;
 		read(fd[0], &codeReceived, sizeof(char));
 		cout << endl << yellow << "[DEBUG PM] Lendo código: " << codeReceived << endl;
 		ProcessManager::runCommand(codeReceived);
@@ -64,12 +66,17 @@ void Commander::sendCommands(void) {
 
 	// Enviando pelo pipe o tamanho da fila
 	queueSize = codesQueue.size();
+    cout << endl << yellow << "[DEBUG CM] Tamanho fila: " << queueSize << endl;
 	write(fd[1], &queueSize, sizeof(int));
 
 	// Enviando a fila, caracter por caracter
-	while (!codesQueue.empty()) {
-		currentCode = codesQueue.front();
-		write(fd[1], &currentCode, sizeof(char));
-		codesQueue.pop();
-	}
+    for (int i = 0; i < queueSize; i++) {
+        currentCode = codesQueue.front();
+        cout << "Entrou no primeiro for: " << currentCode << endl;
+        write(fd[1], &currentCode, sizeof(char));
+        codesQueue.pop();
+
+        // Aguarda um segundinho
+        sleep(2);
+    }
 }
