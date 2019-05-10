@@ -1,6 +1,11 @@
 #ifndef cpu_hpp
 #define cpu_hpp
 
+// #include "simulatedProcess.hpp"
+
+// Forward Declarations
+class SimulatedProcess;
+
 class Cpu {
 	private:
 

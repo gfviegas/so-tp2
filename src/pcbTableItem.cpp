@@ -1,14 +1,31 @@
 #include "pcbTableItem.hpp"
 
 // Constructor
-PcbTableItem(int id, int mId, int *n, int *programCounter, int *initTime, int *cpuTime) {
+PcbTableItem::PcbTableItem(int id, int mId, int *n, int *pc, int initTime, int *cpuTime) {
     pid = id;
     masterId = mId;
-    n = n;
-    pc = programCounter;
+    this->n = n;
+    this->pc = pc;
     priority = 0;
-    state = UNBLOCKED;
     this->initTime = initTime;
-	*cpuTime = 0;
+    *cpuTime = 0;
     this->cpuTime = cpuTime;
+}
+
+int PcbTableItem::increasePriority(void) {
+    priority++;
+    return getPriority();
+}
+
+int PcbTableItem::decreasePriority(void) {
+    priority--;
+    return getPriority();
+}
+
+int PcbTableItem::getPriority(void) {
+    return priority;
+}
+
+int PcbTableItem::getCpuTime(void) {
+    return *cpuTime;
 }

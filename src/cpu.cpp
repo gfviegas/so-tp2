@@ -1,5 +1,7 @@
 #include "cpu.hpp"
 
+#include "simulatedProcess.hpp"
+
 // Constructor
 Cpu::Cpu(void) {
 	processTime = 0;
@@ -13,6 +15,6 @@ void Cpu::changeProcess(SimulatedProcess* process, int currentTime) {
 }
 
 void Cpu::nextCommand(void) {
-	process.readComand();
+	process->readComand();
 	processTime++;
 }

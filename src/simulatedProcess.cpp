@@ -1,4 +1,5 @@
 #include "simulatedProcess.hpp"
+#include "processManager.hpp"
 
 /**
  * Inicializa um processo simulado
@@ -102,8 +103,7 @@ void SimulatedProcess::sub(int value) {
  * @param {bool} block bloqueia ou desbloqueia processo simulado
  */
 void SimulatedProcess::block() {
-    // state = BLOCKED;
-    // adicionar processo a lista de bloqueados
+    ProcessManager::block();
 }
 
 /**
@@ -133,7 +133,8 @@ SimulatedProcess *SimulatedProcess::fork(int n) {
 		forkedProcess->masterId,
 		&(forkedProcess->pc),
 		&(forkedProcess->n),
-		&(forkedProcess->cpuTime)
+		&(forkedProcess->cpuTime),
+		this
 	);
 
     return forkedProcess;
@@ -147,8 +148,7 @@ void SimulatedProcess::read(string file) {
     ifstream stream;
     stream.open(file);
 
-    if (!stream.is_open())
-    {
+    if (!stream.is_open()) {
         cout << "arquivo " << file << " não pode ser lido";
         return;
     }

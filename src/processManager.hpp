@@ -10,61 +10,79 @@
 #ifndef processManager_hpp
 #define processManager_hpp
 
-#include "bits/stdc++.h"
-
-#include "<priority_queue>"
-#include "<queue>"
-#include "cpu.hpp"
+#include <vector>
+#include <queue>
+#include <iostream>
+#include <fstream>
+#include "util/logger.hpp"
 #include "pcbTableItem.hpp"
-#include "simulatedProcess.hpp"
+#include "cpu.hpp"
+// #include "simulatedProcess.hpp"
 // #include "reporter.hpp"
 
 using namespace std;
 
+// Forward Declarations
+class SimulatedProcess;
+
+typedef vector<PcbTableItem> PcbTable;
+typedef struct PriorityProcessItem {
+    int *priority;
+    int pcbTableIndex;
+    SimulatedProcess *process;
+
+    bool operator<(const PriorityProcessItem& item) const {
+        return priority < item.priority;
+    }
+} PriorityProcessItem;
+
 class ProcessManager {
-	private:
-		// Q - Fim de uma unidade de tempo
-		static void execute(void);
+    private:
+        // Q - Fim de uma unidade de tempo
+        static void execute(void);
 
-		// U - Desbloqueia o primeiro processo simulado na fila bloqueada.
-		static void unblock(void);
+        // U - Desbloqueia o primeiro processo simulado na fila bloqueada.
+        static void unblock(void);
 
-		// P - Imprime o estado atual do sistema.
-		static void print(void);
+        // P - Imprime o estado atual do sistema.
+        static void print(void);
 
-		// T - Imprime o tempo médio do ciclo e finaliza o sistema.
-		static void endExecution(void);
+        // T - Imprime o tempo médio do ciclo e finaliza o sistema.
+        static void endExecution(void);
 
-		// Unidade de tempo atual.
-		static int time;
+        // Unidade de tempo atual.
+        static int time;
 
-		// CPU
-		static Cpu cpu;
+        // CPU
+        static Cpu cpu;
 
-		// Tabela de Processos.
-		static PcbTable pcbTable;
+        // Tabela de Processos.
+        static PcbTable pcbTable;
 
-		// Fila dos indices dos processos em pcbTable que estão prontos
-		static priority_queue<priorityProcessItem> readyState;
+        // Fila dos indices dos processos em pcbTable que estão prontos
+        static priority_queue<PriorityProcessItem> readyState;
 
-		// Fila dos indices dos processos em pcbTable que estão bloqueados
-		static queue<int> blockedState;
+        // Fila dos indices dos processos em pcbTable que estão bloqueados
+        static queue<PriorityProcessItem> blockedState;
 
-		// Índice do processo em pcbTable que está em execução no momento
-		static int runningState;
+        // Índice do processo em pcbTable que está em execução no momento
+        static PriorityProcessItem runningState;
 
-		// Construtor
-		ProcessManager(void);
+        // Troca de contexto
+        static void contextChange(void);
 
-	public:
-		static void init(void);
-		static void runCommand(char command);
+        // Construtor
+        ProcessManager(void);
 
-		static void insertProcess(int pid, int masterId, int *pc, int *n, int *cpuTime);
-		static void removeProcess(int pid);
+    public:
+        static void init(void);
+        static void runCommand(char command);
 
-		// Chamado pelo SP pra atualizar blockedState e atualizar prioridades de acordo com a politica.
-		static void block(void);
+        static void insertProcess(int pid, int masterId, int *pc, int *n, int *cpuTime, SimulatedProcess* process);
+        static void removeProcess(int pid);
+
+        // Chamado pelo SP pra atualizar blockedState e atualizar prioridades de acordo com a politica.
+        static void block(void);
 };
 
 #endif /* processManager_hpp */

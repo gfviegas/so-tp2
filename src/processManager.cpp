@@ -8,8 +8,7 @@
  */
 
 #include "processManager.hpp"
-
-#include "util/logger.hpp"
+#include "simulatedProcess.hpp"
 
 ProcessManager::ProcessManager(void) {
 }
@@ -23,8 +22,7 @@ void ProcessManager::init(void) {
     string program;
     char c = stream.get();
 
-    while (stream.good())
-    {
+    while (stream.good()) {
         program += c;
         c = stream.get();
     }
@@ -32,11 +30,24 @@ void ProcessManager::init(void) {
     stream.close();
 
     SimulatedProcess *firstProcess = new SimulatedProcess(program);
+    insertProcess(
+		firstProcess->id,
+		firstProcess->masterId,
+		&(firstProcess->pc),
+		&(firstProcess->n),
+		&(firstProcess->cpuTime),
+		firstProcess
+	);
 
-    // firstProcess->readComand();
-    // firstProcess->readComand();
+    contextChange();
+}
 
-    // enviar processo para CPU, PCBTABLE
+
+// Segundo a politica de escalonamento, parcela de quantum que o processo tem disponivel
+int remainingQuantum(PcbTableItem item) {
+
+	// A quantidade de Quantum que o processo tem que rodar é 2^priority.
+	return item.getCpuTime() - (1 << item.getPriority());
 }
 
 /**
@@ -45,22 +56,40 @@ void ProcessManager::init(void) {
  */
 void ProcessManager::execute(void) {
 	time++;
-	cpu.nextCommand(time);
+	cpu.nextCommand();
+
+	//  Se o processo em execução usar a sua fatia de tempo por completo, a sua prioridade é diminuída
+	if (remainingQuantum(pcbTable[runningState.pcbTableIndex]) == 0) {
+		pcbTable[runningState.pcbTableIndex].decreasePriority();
+	}
 }
 
 void ProcessManager::unblock(void) {
+	// Pega o primeiro processo bloqueado
+	PriorityProcessItem p = blockedState.front();
+
+	// Adiciona na fila de processos prontos
+	readyState.push(p);
+
+	// Remove o processo da fila de bloqueados.
+	blockedState.pop();
 }
 
 void ProcessManager::print(void) {
 }
 
-
 void ProcessManager::endExecution(void) {
 }
 
 void ProcessManager::block(void) {
-	// Verificar tempo de CPU do SP, ver sua prioridade, se nao usou X valores, atualizar priroidade...
-	// Atualizar blockedState, etc.
+	blockedState.push(runningState);
+
+	// Se o processo for bloqueado, antes de expirar seu quantum alocado, a sua prioridade é aumentada.
+	if (remainingQuantum(pcbTable[runningState.pcbTableIndex]) > 0) {
+		pcbTable[runningState.pcbTableIndex].increasePriority();
+	}
+
+	contextChange();
 }
 
 void ProcessManager::runCommand(char command) {
@@ -73,46 +102,45 @@ void ProcessManager::runCommand(char command) {
 	}
 }
 
-void ProcessManager::insertProcess(int pid, int masterId, int *pc, int *n, int *cpuTime) {
-	PcbTableItem item = new PcbTableItem(
+void ProcessManager::insertProcess(int pid, int masterId, int *pc, int *n, int *cpuTime, SimulatedProcess* process) {
+	PcbTableItem item(
 		pid,
 		masterId,
 		pc,
 		n,
-		cpuTime,
-		time
+        time,
+		cpuTime
 	);
 
 	pcbTable.push_back(item);
 
-	priorityProcessItem ppItem;
+	PriorityProcessItem ppItem;
 	ppItem.pcbTableIndex = pcbTable.size() - 1;
 	ppItem.priority = &(pcbTable[ppItem.pcbTableIndex].priority);
-	readyState.push_back(ppItem);
+	ppItem.process = process;
+	readyState.push(ppItem);
 }
 
 // Remove um processo da tabela
 void ProcessManager::removeProcess(int pid) {
-	int index;
-
-	for (PcbTableItem item : pcbTable) {
-		if (item.id == pid) {
-			int index = distance(pcbTable.begin(), item);
-			pcbTable.erase(index);
-			return;
-		}
-	}
+    for (int i = 0; i < (int) pcbTable.size(); i++) {
+        if (pcbTable[i].pid == pid) {
+            pcbTable.erase(pcbTable.begin() + i);
+            return;
+        }
+    }
 
 	// TODO: dependendo da politica de escalonamento, chamar ela pra pegar um proximo processo
+    contextChange();
 }
 
-// Muda o processo que está rodando na CPU
-void ProcessManager::contextChange(SimulatedProcess *process) {
-	cpu.process = process;
+// Muda o processo que está rodando na CPU para o proximo na fila de readystate
+void ProcessManager::contextChange(void) {
+	PriorityProcessItem ppItem = runningState;
+	PriorityProcessItem nextPpItem = readyState.top();
+	readyState.pop();
+	readyState.push(ppItem);
 
-	for (int i = 0; i < pcbTable.size(); i++) {
-		if (pcbTable[i].pid == process->id) {
-			runningState = i;
-		}
-	}
+	runningState = nextPpItem;
+	cpu.changeProcess(runningState.process, time);
 }

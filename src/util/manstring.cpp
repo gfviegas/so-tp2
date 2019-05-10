@@ -1,7 +1,6 @@
 #include "manstring.hpp"
 
-string *explode(string text, char delimiter)
-{
+string *explode(string text, char delimiter) {
     // Vector of string to save tokens
     vector<string> tokens;
 
@@ -11,8 +10,7 @@ string *explode(string text, char delimiter)
     string intermediate;
 
     // Tokenizing w.r.t. space ' '
-    while (getline(check1, intermediate, delimiter))
-    {
+    while (getline(check1, intermediate, delimiter)) {
         tokens.push_back(intermediate);
     }
 
