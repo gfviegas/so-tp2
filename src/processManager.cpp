@@ -72,6 +72,8 @@ void ProcessManager::execute(void) {
 }
 
 void ProcessManager::unblock(void) {
+    if (blockedState.empty()) return;
+
 	// Pega o primeiro processo bloqueado
 	PriorityProcessItem p = blockedState.front();
 
@@ -83,6 +85,10 @@ void ProcessManager::unblock(void) {
 }
 
 void ProcessManager::print(void) {
+    // TODO: Forkar e mandar printar direito
+    cout << red << "[PM]" << endl;
+    cout << red << "\ttime: " << reset << time << endl;
+    cout << red << "\trs: " << reset << runningState.pcbTableIndex << ", " << *(runningState.priority) << endl;
 }
 
 void ProcessManager::endExecution(void) {
