@@ -18,6 +18,9 @@ class PcbTableItem {
         int increasePriority(void);
         int decreasePriority(void);
         int getPriority(void);
+        int getMasterId(void);
+        int getValue(void);
+        int getInitTime(void);
 };
 
 #endif /* pcbTable_hpp */

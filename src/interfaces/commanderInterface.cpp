@@ -97,7 +97,7 @@ queue<char> CommanderInterface::readCommandFromFile(void) {
 			cout << reset << endl;
 			alreadyRan = true;
 
-			inputFile.open(filePath);
+			inputFile.open(filePath.c_str());
 		} while (!inputFile.is_open());
 
 

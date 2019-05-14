@@ -17,6 +17,7 @@
 #include "util/logger.hpp"
 #include "pcbTableItem.hpp"
 #include "cpu.hpp"
+#include <unistd.h>
 // #include "simulatedProcess.hpp"
 // #include "reporter.hpp"
 
@@ -53,8 +54,12 @@ class ProcessManager {
         // Unidade de tempo atual.
         static int time;
 
+        //PID para criar o process reporter
+        static pid_t forkPID;
+
         // CPU
         static Cpu cpu;
+
 
         // Tabela de Processos.
         static PcbTable pcbTable;

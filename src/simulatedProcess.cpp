@@ -146,7 +146,7 @@ SimulatedProcess *SimulatedProcess::fork(int n) {
  */
 void SimulatedProcess::read(string file) {
     ifstream stream;
-    stream.open(file);
+    stream.open(file.c_str());
 
     if (!stream.is_open()) {
         cout << "arquivo " << file << " não pode ser lido";

@@ -9,6 +9,7 @@
 
 #include "processManager.hpp"
 #include "simulatedProcess.hpp"
+#include "reporter.hpp"
 
 int ProcessManager::time;
 Cpu ProcessManager::cpu;
@@ -85,10 +86,16 @@ void ProcessManager::unblock(void) {
 }
 
 void ProcessManager::print(void) {
-    // TODO: Forkar e mandar printar direito
-    cout << red << "[PM]" << endl;
-    cout << red << "\ttime: " << reset << time << endl;
-    cout << red << "\trs: " << reset << runningState.pcbTableIndex << ", " << *(runningState.priority) << endl;
+	forkPID = fork();
+
+	if(forkPID < 0){
+		perror("Erro no fork");
+		exit(1);
+	}else if(forkPID == 0){
+		//Estamos no filho
+	}else{
+		//Estamos no pai, temos que esperar
+	}
 }
 
 void ProcessManager::endExecution(void) {

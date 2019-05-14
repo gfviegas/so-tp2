@@ -29,3 +29,15 @@ int PcbTableItem::getPriority(void) {
 int PcbTableItem::getCpuTime(void) {
     return *cpuTime;
 }
+
+int PcbTableItem::getMasterId(void) {
+    return masterId;
+}
+
+int PcbTableItem::getValue(void){
+    return *n;
+}
+
+int PcbTableItem::getInitTime(void){
+    return initTime;
+}
