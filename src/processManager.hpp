@@ -60,7 +60,6 @@ class ProcessManager {
         // CPU
         static Cpu cpu;
 
-
         // Tabela de Processos.
         static PcbTable pcbTable;
 

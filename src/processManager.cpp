@@ -86,14 +86,14 @@ void ProcessManager::unblock(void) {
 }
 
 void ProcessManager::print(void) {
-	forkPID = fork();
+	pid_t forkPID = fork();
 
-	if(forkPID < 0){
+	if(forkPID < 0 ){
 		perror("Erro no fork");
 		exit(1);
-	}else if(forkPID == 0){
+	} else if(forkPID == 0) {
 		//Estamos no filho
-	}else{
+	} else {
 		//Estamos no pai, temos que esperar
 	}
 }
