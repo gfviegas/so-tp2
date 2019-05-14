@@ -10,6 +10,7 @@
 #ifndef processManager_hpp
 #define processManager_hpp
 
+
 #include <vector>
 #include <queue>
 #include <iostream>
@@ -18,6 +19,7 @@
 #include "pcbTableItem.hpp"
 #include "cpu.hpp"
 #include <unistd.h>
+#include <sys/wait.h> 
 // #include "simulatedProcess.hpp"
 // #include "reporter.hpp"
 
