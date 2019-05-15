@@ -23,6 +23,15 @@ void printLine(void) {
 	cout << reset << endl;
 }
 
+void printLineAsterisc(void) {
+		cout << endl;
+
+    for (int i = 0; i < LINE_SIZE; i++)
+		cout << "*";
+
+		cout << endl;
+}
+
 void promptArrow(void) {
 	cout << yellow << " > " << reset;
 }

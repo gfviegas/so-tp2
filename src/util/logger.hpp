@@ -39,6 +39,8 @@ void clearOutput(void);
  */
 void printLine(void);
 
+void printLineAsterisc(void);
+
 /**
  * Imprime uma linha auxiliar especial pra entrada de dados em amarelo (default do sistema)
  */

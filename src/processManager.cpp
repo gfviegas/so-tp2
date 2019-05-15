@@ -101,6 +101,7 @@ void ProcessManager::print(void) {
 }
 
 void ProcessManager::endExecution(void) {
+	// chamar o processo de end do reporter
 }
 
 void ProcessManager::block(void) {
