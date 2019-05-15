@@ -9,13 +9,14 @@ using namespace std;
 class Reporter {
 	private:
 		/* data */
-
-	public:
-		Reporter (void);
-		void print(int time, PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState, queue<PriorityProcessItem> blockedState, PriorityProcessItem runningState);
 		void printBlockedQueue(PcbTable pcbtab, queue<PriorityProcessItem> blockedState);
 		void printRunningProcess(PcbTable pcbtab, PriorityProcessItem runningState);
 		void printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState);
+
+	public:
+		Reporter (void);
+		static void print(int time, PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState, queue<PriorityProcessItem> blockedState, PriorityProcessItem runningState);
+		static void end();
 };
 
 #endif /* reporter_hpp */

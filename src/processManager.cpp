@@ -87,13 +87,12 @@ void ProcessManager::unblock(void) {
 
 void ProcessManager::print(void) {
 	pid_t forkPID = fork();
-	Reporter reporter;
 	if(forkPID < 0 ){
 		perror("Erro no fork");
 		exit(1);
 	} else if(forkPID == 0) {
 		//Estamos no filho
-		reporter.print(time, pcbTable, readyState, blockedState, runningState);
+		Reporter::print(time, pcbTable, readyState, blockedState, runningState);
 	} else {
 		//Estamos no pai, temos que esperar
 		waitpid(-1, NULL, 0);
@@ -101,7 +100,17 @@ void ProcessManager::print(void) {
 }
 
 void ProcessManager::endExecution(void) {
-	// chamar o processo de end do reporter
+	pid_t forkPID = fork();
+	if(forkPID < 0 ){
+		perror("Erro no fork");
+		exit(1);
+	} else if(forkPID == 0) {
+		//Estamos no filho
+		Reporter::end();
+	} else {
+		//Estamos no pai, temos que esperar
+		waitpid(-1, NULL, 0);
+	}
 }
 
 void ProcessManager::block(void) {

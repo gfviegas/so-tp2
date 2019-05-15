@@ -58,3 +58,9 @@ void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProces
         i++;
     }
 }
+
+void Reporter::end() {
+    // imprimir o tempo médio do ciclo
+    cout << "tempo médio do ciclo" << endl;
+    exit(1);
+}
