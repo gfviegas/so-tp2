@@ -10,18 +10,17 @@ void Reporter::print(int time, PcbTable pcbtab, priority_queue<PriorityProcessIt
     printLineAsterisc();
     cout << "CURRENT TIME: " << time << "\n";
     cout << "RUNNING PROCESS:\n";
-    this->printRunningProcess(pcbtab, runningState);
+    printRunningProcess(pcbtab, runningState);
     cout << "BLOCKED PROCESSES:\n";
-    this->printBlockedQueue(pcbtab, blockedState);
+    printBlockedQueue(pcbtab, blockedState);
     cout << "PROCESSES READY TO EXECUTE:\n";
-    this->printPriorityQueue(pcbtab, readyState);
+    printPriorityQueue(pcbtab, readyState);
     printLineAsterisc();
 }
 
 void Reporter::printBlockedQueue(PcbTable pcbtab, queue<PriorityProcessItem> blockedState) {
-    int i;
     cout << "Queue of blocked processes: \n";
-    for( i = 0; i < blockedState.size(); i++){
+    for (int i = 0; i < (int) blockedState.size(); i++) {
         cout << pcbtab[blockedState.front().pcbTableIndex].pid << ", ";
         cout << pcbtab[blockedState.front().pcbTableIndex].getMasterId() << ", ";
         cout << pcbtab[blockedState.front().pcbTableIndex].priority << ", ";
@@ -44,8 +43,8 @@ void Reporter::printRunningProcess(PcbTable pcbtab, PriorityProcessItem runningS
 
 void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState){
     int i = 0;
-    while(i <= PRIORITY_MAX_VALUE){
-        while(pcbtab[readyState.top().pcbTableIndex].priority == i){
+    while (i <= PRIORITY_MAX_VALUE) {
+        while (pcbtab[readyState.top().pcbTableIndex].priority == i) {
             cout << "Queue of process with priority " << i << ":\n";
             cout << pcbtab[readyState.top().pcbTableIndex].pid << ",";
             cout << pcbtab[readyState.top().pcbTableIndex].getMasterId() << ",";
@@ -55,6 +54,7 @@ void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProces
             cout << pcbtab[readyState.top().pcbTableIndex].getCpuTime() << "\n";
             readyState.pop();
         }
+
         i++;
     }
 }

@@ -8,11 +8,9 @@
 using namespace std;
 class Reporter {
 	private:
-		/* data */
-		void printBlockedQueue(PcbTable pcbtab, queue<PriorityProcessItem> blockedState);
-		void printRunningProcess(PcbTable pcbtab, PriorityProcessItem runningState);
-		void printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState);
-
+		static void printBlockedQueue(PcbTable pcbtab, queue<PriorityProcessItem> blockedState);
+		static void printRunningProcess(PcbTable pcbtab, PriorityProcessItem runningState);
+		static void printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState);
 	public:
 		Reporter (void);
 		static void print(int time, PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState, queue<PriorityProcessItem> blockedState, PriorityProcessItem runningState);
