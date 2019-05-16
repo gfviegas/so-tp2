@@ -61,8 +61,8 @@ void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProces
         cout << blue << setw(40) << right << "Priority " << i << endl;
         printLine(66, '-');
 
-        for(int j = 0; j < pcbtab.size(); j++) {
-            if(pcbtab[j].priority == i && j != runningIndex)
+        for (int j = 0; j < (int) pcbtab.size(); j++) {
+            if (pcbtab[j].priority == i && j != runningIndex)
                 printProccess(pcbtab[j]);
         }
 
@@ -73,5 +73,4 @@ void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProces
 void Reporter::end() {
     // Imprimir o tempo médio do ciclo
     cout << "tempo médio do ciclo" << endl;
-    exit(0);
 }

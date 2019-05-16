@@ -54,6 +54,8 @@ void Commander::readCommands(void) {
 		ProcessManager::runCommand(codeReceived);
         codesQueue.pop();
 	}
+
+    exit(1);
 }
 
 void Commander::sendCommands(void) {
@@ -83,4 +85,6 @@ void Commander::sendCommands(void) {
         write(fd[1], &currentCode, sizeof(char));
         codesQueue.pop();
     }
+
+    wait(NULL);
 }

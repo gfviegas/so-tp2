@@ -81,15 +81,17 @@ void ProcessManager::unblock(void) {
 
 void ProcessManager::print(void) {
 	pid_t forkPID = fork();
-	if(forkPID < 0 ){
+
+	if (forkPID < 0) {
 		perror("Erro no fork");
 		exit(1);
 	} else if(forkPID == 0) {
 		//Estamos no filho
 		Reporter::print(time, pcbTable, readyState, blockedState, runningState);
+        exit(0);
 	} else {
 		//Estamos no pai, temos que esperar
-		waitpid(-1, NULL, 0);
+		wait(NULL);
 	}
 }
 
