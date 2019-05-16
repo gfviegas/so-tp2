@@ -4,12 +4,14 @@
 #include "processManager.hpp"
 #include "util/logger.hpp"
 #include "pcbTableItem.hpp"
+#include <iomanip>
 
 using namespace std;
 class Reporter {
 	private:
+		static void printReporterHeader(void);
 		static void printBlockedQueue(PcbTable pcbtab, queue<PriorityProcessItem> blockedState);
-		static void printRunningProcess(PcbTable pcbtab, PriorityProcessItem runningState);
+		static void printProccess(PcbTableItem pItem);
 		static void printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState);
 	public:
 		Reporter (void);
