@@ -16,12 +16,12 @@ PcbTableItem::PcbTableItem(int id, int mId, int *pc, int *n, int initTime, int *
 }
 
 int PcbTableItem::increasePriority(void) {
-    if (priority < MAX_PRIORITY) priority++;
+    if (priority > MIN_PRIORITY) priority--;
     return getPriority();
 }
 
 int PcbTableItem::decreasePriority(void) {
-    if (priority > MIN_PRIORITY) priority--;
+    if (priority < MAX_PRIORITY) priority++;
     return getPriority();
 }
 
