@@ -19,9 +19,7 @@
 #include "pcbTableItem.hpp"
 #include "cpu.hpp"
 #include <unistd.h>
-#include <sys/wait.h> 
-// #include "simulatedProcess.hpp"
-// #include "reporter.hpp"
+#include <sys/wait.h>
 
 using namespace std;
 

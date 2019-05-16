@@ -156,12 +156,43 @@ void ProcessManager::insertProcess(int pid, int masterId, int *pc, int *n, int *
 
 // Remove um processo da tabela
 void ProcessManager::removeProcess(int pid) {
+    int elementIndex = -1;
     for (int i = 0; i < (int) pcbTable.size(); i++) {
         if (pcbTable[i].pid == pid) {
+            elementIndex = i;
             pcbTable.erase(pcbTable.begin() + i);
-            return;
+            break;
         }
     }
+
+    // Erro!
+    if (elementIndex == -1) {
+        perror("Erro ao remover o processo!");
+		exit(1);
+    }
+
+    // Todos elementos depois de elementIndex devem ser reindexados em: readyState, blockedState e runningState
+    if (runningState.pcbTableIndex > elementIndex) runningState.pcbTableIndex--;
+
+    // Criando uma blockedState nova com valores atualizados de pcbTableIndex
+    queue<PriorityProcessItem> newBlockedQueue;
+    while (!blockedState.empty()) {
+        PriorityProcessItem pItem = blockedState.front();
+        if (pItem.pcbTableIndex > elementIndex) pItem.pcbTableIndex--;
+        newBlockedQueue.push(pItem);
+        blockedState.pop();
+    }
+    blockedState = newBlockedQueue;
+
+    // Criando uma readyState nova com valores atualizados de pcbTableIndex
+    priority_queue<PriorityProcessItem> newReadyState;
+    while (!readyState.empty()) {
+        PriorityProcessItem pItem = readyState.top();
+        if (pItem.pcbTableIndex > elementIndex) pItem.pcbTableIndex--;
+        newBlockedQueue.push(pItem);
+        readyState.pop();
+    }
+    readyState = newReadyState;
 
 	// TODO: dependendo da politica de escalonamento, chamar ela pra pegar um proximo processo
     contextChange();
