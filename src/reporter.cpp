@@ -23,7 +23,7 @@ void Reporter::print(int time, PcbTable pcbtab, priority_queue<PriorityProcessIt
 
     cout << blue << "PROCESSES READY TO EXECUTE:" << reset << endl;
     printReporterHeader();
-    printPriorityQueue(pcbtab, readyState);
+    printPriorityQueue(pcbtab, readyState, runningState.pcbTableIndex);
 
     printLine(66);
 }
@@ -54,7 +54,7 @@ void Reporter::printProccess(PcbTableItem pItem) {
     cout << yellow << setw(10) << right << pItem.getCpuTime() << reset << endl;
 }
 
-void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState){
+void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState, int runningIndex){
     int i = 0;
     while (i <= 3) {
         printLine(66, '-');
@@ -62,10 +62,10 @@ void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProces
         printLine(66, '-');
 
         for(int j = 0; j < pcbtab.size(); j++) {
-            if(pcbtab[j].priority == i)
+            if(pcbtab[j].priority == i && j != runningIndex)
                 printProccess(pcbtab[j]);
         }
-        
+
         i++;
     }
 }

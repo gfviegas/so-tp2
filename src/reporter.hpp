@@ -12,7 +12,7 @@ class Reporter {
 		static void printReporterHeader(void);
 		static void printBlockedQueue(PcbTable pcbtab, queue<PriorityProcessItem> blockedState);
 		static void printProccess(PcbTableItem pItem);
-		static void printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState);
+		static void printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState, int runningIndex);
 	public:
 		Reporter (void);
 		static void print(int time, PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState, queue<PriorityProcessItem> blockedState, PriorityProcessItem runningState);
