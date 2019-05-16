@@ -1,6 +1,9 @@
 #ifndef pcbTableItem_hpp
 #define pcbTableItem_hpp
 
+#define MIN_PRIORITY 0
+#define MAX_PRIORITY 3
+
 class PcbTableItem {
     private:
         int masterId;

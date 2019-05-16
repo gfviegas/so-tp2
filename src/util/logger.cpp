@@ -14,11 +14,18 @@ void clearOutput(void) {
 
 // Imprime uma linha de tamanho LINE_SIZE, em cor Ciano
 void printLine(void) {
-	cout << endl;
-	cout << cyan;
-
-    for (int i = 0; i < LINE_SIZE; i++)
-		cout << "=";
+    printLine(LINE_SIZE);
+}
+void printLine(char character) {
+	printLine(LINE_SIZE, character);
+}
+void printLine(int lineSize) {
+	printLine(lineSize, '=');
+}
+void printLine(int lineSize, char character) {
+	cout << endl << cyan;
+    for (int i = 0; i < lineSize; i++)
+		cout << character;
 
 	cout << reset << endl;
 }
@@ -29,7 +36,7 @@ void printLineAsterisc(void) {
     for (int i = 0; i < LINE_SIZE; i++)
 		cout << "*";
 
-		cout << endl;
+	cout << endl;
 }
 
 void promptArrow(void) {

@@ -1,30 +1,34 @@
 #include "reporter.hpp"
-#define PRIORITY_MAX_VALUE 12
+
 // Constructor
 Reporter::Reporter(void) {
 }
 
 void Reporter::print(int time, PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState, queue<PriorityProcessItem> blockedState, PriorityProcessItem runningState){
-    printLineAsterisc();
-    cout << "The current system state is as follows:";
-    printLineAsterisc();
+    printLine(66);
+    cout << blue << setw(5) << right << "The current system state is as follows:";
+    printLine(66);
+
     cout << blue << "CURRENT TIME: " << green << time << reset << endl;
 
-    cout << blue << "RUNNING PROCESS:" << reset << endl;
+    cout << endl << blue << "RUNNING PROCESS:" << reset << endl;
     printReporterHeader();
     printProccess(pcbtab[runningState.pcbTableIndex]);
+    printLine(66, '-');
+
     cout << blue << "BLOCKED PROCESSES:" << reset << endl;
     printReporterHeader();
     printBlockedQueue(pcbtab, blockedState);
+    printLine(66, '-');
+
     cout << blue << "PROCESSES READY TO EXECUTE:" << reset << endl;
     printReporterHeader();
     printPriorityQueue(pcbtab, readyState);
 
-    printLineAsterisc();
+    printLine(66);
 }
 
 void Reporter::printReporterHeader(void) {
-    cout << endl;
     cout << cyan << setw(5) << right << "PID" << " | ";
     cout << cyan << setw(5) << right << "PPID" << " | ";
     cout << cyan << setw(10) << right << "Priority" << " | ";
@@ -34,7 +38,6 @@ void Reporter::printReporterHeader(void) {
 }
 
 void Reporter::printBlockedQueue(PcbTable pcbtab, queue<PriorityProcessItem> blockedState) {
-    cout << "Queue of blocked processes: \n";
     for (int i = 0; i < (int) blockedState.size(); i++) {
         printProccess(pcbtab[blockedState.front().pcbTableIndex]);
         blockedState.pop();
@@ -53,12 +56,19 @@ void Reporter::printProccess(PcbTableItem pItem) {
 
 void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState){
     int i = 0;
-    while (i <= PRIORITY_MAX_VALUE) {
-        cout << "Queue of process with priority " << i << ":" << endl;
-        while (pcbtab[readyState.top().pcbTableIndex].priority == i) {
-            printProccess(pcbtab[readyState.top().pcbTableIndex]);
-            readyState.pop();
-        }
+    while (i <= 3) {
+        printLine(66, '-');
+        cout << blue << setw(40) << right << "Priority " << i << endl;
+        printLine(66, '-');
+        // O código abaixo está dando loop infinito
+        // Pode ser que o primeiro nao tenha prioridade 0, e ai?
+        // Talvez uma estrategia mais interessante é construir filas pra cada prioridade depois
+        // printar cada uma.
+
+    //     while (pcbtab[readyState.top().pcbTableIndex].priority == i) {
+    //         printProccess(pcbtab[readyState.top().pcbTableIndex]);
+    //         readyState.pop();
+    //     }
 
         i++;
     }

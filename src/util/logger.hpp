@@ -38,6 +38,10 @@ void clearOutput(void);
  * Imprime uma linha de tamanho LINE_SIZE, em cor Ciano
  */
 void printLine(void);
+void printLine(char character);
+void printLine(int lineSize);
+void printLine(int lineSize, char character);
+
 
 void printLineAsterisc(void);
 
