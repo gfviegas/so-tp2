@@ -60,16 +60,12 @@ void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProces
         printLine(66, '-');
         cout << blue << setw(40) << right << "Priority " << i << endl;
         printLine(66, '-');
-        // O código abaixo está dando loop infinito
-        // Pode ser que o primeiro nao tenha prioridade 0, e ai?
-        // Talvez uma estrategia mais interessante é construir filas pra cada prioridade depois
-        // printar cada uma.
 
-    //     while (pcbtab[readyState.top().pcbTableIndex].priority == i) {
-    //         printProccess(pcbtab[readyState.top().pcbTableIndex]);
-    //         readyState.pop();
-    //     }
-
+        for(int j = 0; j < pcbtab.size(); j++) {
+            if(pcbtab[j].priority == i)
+                printProccess(pcbtab[j]);
+        }
+        
         i++;
     }
 }

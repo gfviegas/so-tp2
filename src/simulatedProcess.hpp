@@ -9,13 +9,12 @@ class ProcessManager;
 
 using namespace std;
 static int COUNT_ID = -1;
+
 class SimulatedProcess {
     private:
     	string *program;
 
-    	// confirmar esses atributos na estutura correta
-
-    	void setProgram(int masterId, string *program, int pc);
+    	void setProgram(int masterId, string *program, int pc, int value);
     	void init();
     	void set(int value);
     	void add(int value);

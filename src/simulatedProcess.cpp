@@ -9,7 +9,7 @@ void SimulatedProcess::init() {
     masterId = -1;
     pc = -1;
     n = 0;
-	cpuTime = 0;
+	  cpuTime = 0;
 }
 
 // Constructor
@@ -26,10 +26,11 @@ SimulatedProcess::SimulatedProcess(string rawProgram) {
  * Seta um novo programa no sistema
  * @param {String} p programa do processo simulado
  */
-void SimulatedProcess::setProgram(int id, string *p, int programCounter) {
+void SimulatedProcess::setProgram(int id, string *p, int programCounter, int value) {
     masterId = id;
     program = p;
     pc = programCounter;
+    n = value;
 }
 
 /**
@@ -38,7 +39,7 @@ void SimulatedProcess::setProgram(int id, string *p, int programCounter) {
  */
 void SimulatedProcess::readComand(void) {
     pc++;
-	cpuTime++;
+	  cpuTime++;
     int n;
     string *command = explode(program[pc], ' ');
 
@@ -64,7 +65,6 @@ void SimulatedProcess::readComand(void) {
         case 'F':
             n = atoi(command[1].c_str());
             fork(n);
-            // adicionar a lista de processos
             break;
         case 'R':
             read(command[1]);
@@ -123,15 +123,15 @@ void SimulatedProcess::end(SimulatedProcess **process) {
  * Cria um novo processo simulado a partir do processo pai (F)
  * @returns {SimulatedProcess*} processo simulado
  */
-SimulatedProcess *SimulatedProcess::fork(int n) {
+SimulatedProcess *SimulatedProcess::fork(int skip) {
     SimulatedProcess *forkedProcess = new SimulatedProcess;
-    forkedProcess->setProgram(id, program, pc + 1);
+    forkedProcess->setProgram(id, program, pc + 1, n);
 
     // pula instruções do processo pai
-    pc += n;
+    pc += skip;
 
 	// Cadastra o processo criado na tabela de processos.
-	ProcessManager::insertProcess(this);
+	ProcessManager::insertProcess(forkedProcess);
 
     return forkedProcess;
 }
