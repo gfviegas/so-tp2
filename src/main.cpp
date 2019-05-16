@@ -11,8 +11,27 @@
 #include "commander.hpp"
 #include "interfaces/commanderInterface.hpp"
 
+// class Teste {
+//     private:
+//
+//     public:
+//         int valor;
+//         Teste (int valor) {
+//             this->valor = valor;
+//         };
+// };
+//
+// void updateClassValue(int *n) {
+//     *n += 2;
+// }
+
 using namespace std;
 int main(int argc, const char *argv[]) {
+    // Teste t(2);
+    // cout << t.valor << endl;
+    // updateClassValue(&(t.valor));
+    // cout << t.valor << endl;
+
     try {
         clearOutput();
         CommanderInterface::welcome();
@@ -23,9 +42,9 @@ int main(int argc, const char *argv[]) {
 		printError(e);
 		exit(1);
 	}
+
     // Modo default é o modo normal
     // int programMode = NORMAL_MODE;
-
     // for (int i = 0; i < argc; i++)
     // if (strcmp(argv[i], "-d") == 0) programMode = DEBUG_MODE;
 

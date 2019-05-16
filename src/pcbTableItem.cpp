@@ -1,15 +1,18 @@
 #include "pcbTableItem.hpp"
 
+#include <iostream>
 // Constructor
-PcbTableItem::PcbTableItem(int id, int mId, int *n, int *pc, int initTime, int *cpuTime) {
+PcbTableItem::PcbTableItem(int id, int mId, int *pc, int *n, int initTime, int *cpuTime) {
     pid = id;
     masterId = mId;
-    this->n = n;
     this->pc = pc;
+    this->n = n;
     priority = 0;
     this->initTime = initTime;
     *cpuTime = 0;
     this->cpuTime = cpuTime;
+
+    std::cout << "[PCTi] *N = " << *n << "N = " << n << std::endl;
 }
 
 int PcbTableItem::increasePriority(void) {
@@ -34,10 +37,10 @@ int PcbTableItem::getMasterId(void) {
     return masterId;
 }
 
-int PcbTableItem::getValue(void){
+int PcbTableItem::getValue(void) {
     return *n;
 }
 
-int PcbTableItem::getInitTime(void){
+int PcbTableItem::getInitTime(void) {
     return initTime;
 }

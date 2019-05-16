@@ -82,7 +82,7 @@ class ProcessManager {
         static void init(void);
         static void runCommand(char command);
 
-        static void insertProcess(int pid, int masterId, int *pc, int *n, int *cpuTime, SimulatedProcess* process);
+        static void insertProcess(SimulatedProcess* process);
         static void removeProcess(int pid);
 
         // Chamado pelo SP pra atualizar blockedState e atualizar prioridades de acordo com a politica.

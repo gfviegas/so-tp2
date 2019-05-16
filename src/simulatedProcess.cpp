@@ -42,35 +42,35 @@ void SimulatedProcess::readComand(void) {
     int n;
     string *command = explode(program[pc], ' ');
 
-    switch (command[0].at(0))
-    {
-    case 'S':
-        n = atoi(command[1].c_str());
-        set(n);
-        break;
-    case 'A':
-        n = atoi(command[1].c_str());
-        add(n);
-        break;
-    case 'D':
-        n = atoi(command[1].c_str());
-        sub(n);
-        break;
-    case 'B':
-        block();
-        break;
-    case 'E':
-        break;
-    case 'F':
-        n = atoi(command[1].c_str());
-        fork(n);
-        // adicionar a lista de processos
-        break;
-    case 'R':
-        read(command[1]);
-        break;
-    default:
-        break;
+    cout << cyan << "[SP] " << command[0].at(0) << endl;
+    switch (command[0].at(0)) {
+        case 'S':
+            n = atoi(command[1].c_str());
+            set(n);
+            break;
+        case 'A':
+            n = atoi(command[1].c_str());
+            add(n);
+            break;
+        case 'D':
+            n = atoi(command[1].c_str());
+            sub(n);
+            break;
+        case 'B':
+            block();
+            break;
+        case 'E':
+            break;
+        case 'F':
+            n = atoi(command[1].c_str());
+            fork(n);
+            // adicionar a lista de processos
+            break;
+        case 'R':
+            read(command[1]);
+            break;
+        default:
+            break;
     }
 }
 
@@ -80,6 +80,7 @@ void SimulatedProcess::readComand(void) {
  */
 void SimulatedProcess::set(int value) {
     n = value;
+    cout << cyan << "[SP] SET: " << value << ", " << this->n << endl;
 }
 
 /**
@@ -88,6 +89,7 @@ void SimulatedProcess::set(int value) {
  */
 void SimulatedProcess::add(int value) {
     n += value;
+    cout << cyan << "[SP] ADD: " << value << ", " << this->n << endl;
 }
 
 /**
@@ -96,6 +98,7 @@ void SimulatedProcess::add(int value) {
  */
 void SimulatedProcess::sub(int value) {
     n -= value;
+    cout << cyan << "[SP] SUB: " << value << ", " << this->n << endl;
 }
 
 /**
@@ -128,14 +131,7 @@ SimulatedProcess *SimulatedProcess::fork(int n) {
     pc += n;
 
 	// Cadastra o processo criado na tabela de processos.
-	ProcessManager::insertProcess(
-		forkedProcess->id,
-		forkedProcess->masterId,
-		&(forkedProcess->pc),
-		&(forkedProcess->n),
-		&(forkedProcess->cpuTime),
-		this
-	);
+	ProcessManager::insertProcess(this);
 
     return forkedProcess;
 }

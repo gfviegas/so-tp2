@@ -38,14 +38,7 @@ void ProcessManager::init(void) {
     stream.close();
 
     SimulatedProcess *firstProcess = new SimulatedProcess(program);
-    insertProcess(
-		firstProcess->id,
-		firstProcess->masterId,
-		&(firstProcess->pc),
-		&(firstProcess->n),
-		&(firstProcess->cpuTime),
-		firstProcess
-	);
+    insertProcess(firstProcess);
 
     contextChange();
 }
@@ -65,6 +58,7 @@ int remainingQuantum(PcbTableItem item) {
 void ProcessManager::execute(void) {
 	time++;
 	cpu.nextCommand();
+    cout << "[PM] Execute: " << pcbTable[runningState.pcbTableIndex].getValue() << reset << endl;
 
 	//  Se o processo em execução usar a sua fatia de tempo por completo, a sua prioridade é diminuída
 	if (remainingQuantum(pcbTable[runningState.pcbTableIndex]) == 0) {
@@ -101,15 +95,16 @@ void ProcessManager::print(void) {
 
 void ProcessManager::endExecution(void) {
 	pid_t forkPID = fork();
-	if(forkPID < 0 ){
+	if (forkPID < 0 ) {
 		perror("Erro no fork");
 		exit(1);
-	} else if(forkPID == 0) {
+	} else if (forkPID == 0) {
 		//Estamos no filho
 		Reporter::end();
 	} else {
 		//Estamos no pai, temos que esperar
-		waitpid(-1, NULL, 0);
+		waitpid(forkPID, NULL, 0);
+        system("exit");
 	}
 }
 
@@ -135,14 +130,14 @@ void ProcessManager::runCommand(char command) {
 	}
 }
 
-void ProcessManager::insertProcess(int pid, int masterId, int *pc, int *n, int *cpuTime, SimulatedProcess* process) {
+void ProcessManager::insertProcess(SimulatedProcess* process) {
 	PcbTableItem item(
-		pid,
-		masterId,
-		pc,
-		n,
+		process->id,
+		process->masterId,
+		&(process->pc),
+		&(process->n),
         time,
-		cpuTime
+		&(process->cpuTime)
 	);
 
 	pcbTable.push_back(item);
