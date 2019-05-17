@@ -9,7 +9,7 @@ OBJFILES = $(patsubst %.cpp, %.o, $(SOURCES))
 # Compilador
 CC       = g++
 # Flags
-CFLAGS   = -std=c++11 -c -Wall
+CFLAGS   = -Wall -c -std=c++11
 LDFLAGS  =
 # Nome binário output
 TARGET   = tp2
