@@ -73,8 +73,6 @@ void SimulatedProcess::readComand(void) {
         default:
             break;
     }
-
-    delete command;
 }
 
 /**

@@ -23,22 +23,9 @@ ProcessManager::ProcessManager(void) {
 }
 
 void ProcessManager::init(void) {
-	cout << green << "init do PM rodou" << reset << endl;
+		cout << green << "init do PM rodou" << reset << endl;
 
-    ifstream stream;
-    stream.open("src/init");
-
-    string program;
-    char c = stream.get();
-
-    while (stream.good()) {
-        program += c;
-        c = stream.get();
-    }
-
-    stream.close();
-
-    SimulatedProcess *firstProcess = new SimulatedProcess(program);
+    SimulatedProcess *firstProcess = new SimulatedProcess("R src/init");
     insertProcess(firstProcess);
 
     contextChange();
@@ -169,7 +156,7 @@ void ProcessManager::removeProcess(int pid, SimulatedProcess* process) {
     // Erro!
     if (elementIndex == -1) {
         perror("Erro ao remover o processo!");
-		exit(1);
+				exit(1);
     }
 
     // Todos elementos depois de elementIndex devem ser reindexados em: readyState, blockedState e runningState
