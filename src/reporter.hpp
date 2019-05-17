@@ -5,6 +5,7 @@
 #include "util/logger.hpp"
 #include "pcbTableItem.hpp"
 #include <iomanip>
+#include <numeric>
 
 using namespace std;
 class Reporter {
@@ -16,7 +17,7 @@ class Reporter {
 	public:
 		Reporter (void);
 		static void print(int time, PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState, queue<PriorityProcessItem> blockedState, PriorityProcessItem runningState);
-		static void end();
+		static void end(vector<int> returnTimes);
 };
 
 #endif /* reporter_hpp */

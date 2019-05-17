@@ -17,6 +17,7 @@ PcbTable ProcessManager::pcbTable;
 priority_queue<PriorityProcessItem> ProcessManager::readyState;
 queue<PriorityProcessItem> ProcessManager::blockedState;
 PriorityProcessItem ProcessManager::runningState;
+vector<int> ProcessManager::returnTimes;
 
 ProcessManager::ProcessManager(void) {
 }
@@ -101,8 +102,8 @@ void ProcessManager::endExecution(void) {
 		perror("Erro no fork");
 		exit(1);
 	} else if (forkPID == 0) {
-		//Estamos no filho
-		Reporter::end();
+		// Estamos no filho
+		Reporter::end(returnTimes);
 	} else {
 		//Estamos no pai, temos que esperar
 		waitpid(forkPID, NULL, 0);
@@ -152,7 +153,7 @@ void ProcessManager::insertProcess(SimulatedProcess* process) {
 }
 
 // Remove um processo da tabela
-void ProcessManager::removeProcess(int pid) {
+void ProcessManager::removeProcess(int pid, SimulatedProcess* process) {
     int elementIndex = -1;
     for (int i = 0; i < (int) pcbTable.size(); i++) {
         if (pcbTable[i].pid == pid) {
@@ -161,6 +162,9 @@ void ProcessManager::removeProcess(int pid) {
             break;
         }
     }
+
+    // Como um processo foi finalizado, adicionamos o tempo atual na lista de retornos
+    returnTimes.push_back(time);
 
     // Erro!
     if (elementIndex == -1) {
@@ -190,6 +194,11 @@ void ProcessManager::removeProcess(int pid) {
         readyState.pop();
     }
     readyState = newReadyState;
+
+
+    // Desalocando memória do processo
+    delete process;
+    process = NULL;
 
 	// TODO: dependendo da politica de escalonamento, chamar ela pra pegar um proximo processo
     contextChange();

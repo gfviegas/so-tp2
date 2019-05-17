@@ -16,10 +16,10 @@
 #include <iostream>
 #include <fstream>
 #include "util/logger.hpp"
-#include "pcbTableItem.hpp"
-#include "cpu.hpp"
 #include <unistd.h>
 #include <sys/wait.h>
+#include "pcbTableItem.hpp"
+#include "cpu.hpp"
 
 using namespace std;
 
@@ -72,6 +72,9 @@ class ProcessManager {
         // Índice do processo em pcbTable que está em execução no momento
         static PriorityProcessItem runningState;
 
+        // Lista com os tempos que os processos foram finalizados
+        static vector<int> returnTimes;
+
         // Troca de contexto
         static void contextChange(void);
 
@@ -83,7 +86,7 @@ class ProcessManager {
         static void runCommand(char command);
 
         static void insertProcess(SimulatedProcess* process);
-        static void removeProcess(int pid);
+        static void removeProcess(int pid, SimulatedProcess* process);
 
         // Chamado pelo SP pra atualizar blockedState e atualizar prioridades de acordo com a politica.
         static void block(void);

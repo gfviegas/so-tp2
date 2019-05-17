@@ -70,7 +70,9 @@ void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProces
     }
 }
 
-void Reporter::end() {
+void Reporter::end(vector<int> returnTimes) {
+    double average = (accumulate(returnTimes.begin(), returnTimes.end(), 0) / returnTimes.size());
+
     // Imprimir o tempo médio do ciclo
-    cout << "tempo médio do ciclo" << endl;
+    cout << blue << "Tempo médio do ciclo: " << green << average << reset << endl;
 }

@@ -15,12 +15,12 @@ class SimulatedProcess {
     	string *program;
 
     	void setProgram(int masterId, string *program, int pc, int value);
-    	void init();
+    	void init(void);
     	void set(int value);
     	void add(int value);
     	void sub(int value);
-    	void block();
-    	void end(SimulatedProcess **process);
+    	void block(void);
+    	void end(void);
     	SimulatedProcess *fork(int n);
     	void read(string file);
 

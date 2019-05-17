@@ -4,7 +4,7 @@
 /**
  * Inicializa um processo simulado
  */
-void SimulatedProcess::init() {
+void SimulatedProcess::init(void) {
     id = ++COUNT_ID;
     masterId = -1;
     pc = -1;
@@ -61,6 +61,7 @@ void SimulatedProcess::readComand(void) {
             block();
             break;
         case 'E':
+            end();
             break;
         case 'F':
             n = atoi(command[1].c_str());
@@ -72,6 +73,8 @@ void SimulatedProcess::readComand(void) {
         default:
             break;
     }
+
+    delete command;
 }
 
 /**
@@ -113,10 +116,8 @@ void SimulatedProcess::block() {
  * Encerra o processo simulado passado por parâmetro (E)
  * @param {SimulatedProcess **} ponteiro duplo de um processo simulado
  */
-void SimulatedProcess::end(SimulatedProcess **process) {
-	ProcessManager::removeProcess((*process)->id);
-    delete *process;
-    *process = NULL;
+void SimulatedProcess::end() {
+	ProcessManager::removeProcess(this->id, this);
 }
 
 /**
@@ -145,7 +146,7 @@ void SimulatedProcess::read(string file) {
     stream.open(file.c_str());
 
     if (!stream.is_open()) {
-        cout << "arquivo " << file << " não pode ser lido";
+        cout << red << "Arquivo " << file << " não pode ser lido" << endl;
         return;
     }
 
