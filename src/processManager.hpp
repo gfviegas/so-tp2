@@ -20,6 +20,7 @@
 #include "util/logger.hpp"
 #include "setup.hpp"
 #include "pcbTableItem.hpp"
+#include "priorityProcessItem.hpp"
 #include "cpu.hpp"
 
 using namespace std;
@@ -28,18 +29,6 @@ using namespace std;
 class SimulatedProcess;
 
 typedef vector<PcbTableItem> PcbTable;
-typedef struct PriorityProcessItem {
-    int *priority;
-    int pcbTableIndex;
-    SimulatedProcess *process;
-    bool valid;
-
-    PriorityProcessItem() : valid(false) {};
-
-    bool operator<(const PriorityProcessItem& item) const {
-        return priority < item.priority;
-    }
-} PriorityProcessItem;
 
 class ProcessManager {
     private:
