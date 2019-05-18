@@ -4,17 +4,14 @@ BUILDDIR  = build/
 # Pra C
 HEADERS = $(shell find . -name '*.hpp')
 SOURCES = $(shell find . -name '*.cpp')
-# OBJFILES = $(patsubst %.cpp, %.o, $(SOURCES))
-
-OBJNAMES = $(shell find . -name '*.cpp' -execdir basename '{}' ';')
-OBJFILES = $(patsubst %.cpp, %.o, $(OBJNAMES))
+OBJFILES = $(patsubst %.cpp, %.o, $(SOURCES))
 
 # Compilador
 CC       = g++
 # Flags
+STD      = -std=c++11
 CFLAGS   = -Wall -c
 LDFLAGS  =
-STD = -std=c++11
 # Nome binário output
 TARGET   = tp2
 
@@ -22,8 +19,10 @@ all: build
 build: $(TARGET)
 
 $(TARGET): $(SOURCES)
-	$(CC) $(STD) $(CFLAGS) $(SOURCES) $(LDFLAGS)
-	$(CC) $(STD) -o $(BUILDDIR)$(TARGET) $(OBJFILES)
+	$(CC) -std=c++11 $(CFLAGS) $(SOURCES) $(LDFLAGS) && $(CC) -std=c++11 -o $(BUILDDIR)$(TARGET) $(OBJFILES) | make cleanO
+
+build0:
+	$(CC) $(STD) $(CFLAGS) $(SOURCES) $(LDFLAGS) && $(CC) $(STD) -o $(BUILDDIR)$(TARGET) $(OBJFILES) | make cleanO
 
 cleanO:
 	rm -f $(shell find . -name '*.o') $(shell find . -name '*.hpp.gch') *~

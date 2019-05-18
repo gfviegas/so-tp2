@@ -25,6 +25,7 @@ Commander::Commander(InputSource is) {
 	}
 }
 
+// Método executado apenas para o processo filho do Commander, criado no construtor.
 void Commander::readCommands(void) {
     queue<char> codesQueue;
 	char codeReceived;
@@ -58,6 +59,7 @@ void Commander::readCommands(void) {
     exit(1);
 }
 
+// Método executado apenas pelo processo pai do Commander, após o fork no construtor.
 void Commander::sendCommands(void) {
 	queue<char> codesQueue;
 	char currentCode;
