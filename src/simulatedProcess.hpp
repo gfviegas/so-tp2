@@ -2,7 +2,7 @@
 #define simulatedProcess_hpp
 
 #include "util/manstring.hpp"
-// #include "processManager.hpp"
+#include "setup.hpp"
 
 // Forward Declarations
 class ProcessManager;

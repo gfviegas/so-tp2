@@ -11,8 +11,6 @@ PcbTableItem::PcbTableItem(int id, int mId, int *pc, int *n, int initTime, int *
     this->initTime = initTime;
     *cpuTime = 0;
     this->cpuTime = cpuTime;
-
-    std::cout << "[PCTi] *N = " << *n << "N = " << n << std::endl;
 }
 
 int PcbTableItem::increasePriority(void) {

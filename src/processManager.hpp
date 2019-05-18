@@ -10,14 +10,15 @@
 #ifndef processManager_hpp
 #define processManager_hpp
 
-
 #include <vector>
 #include <queue>
 #include <iostream>
 #include <fstream>
-#include "util/logger.hpp"
 #include <unistd.h>
 #include <sys/wait.h>
+
+#include "util/logger.hpp"
+#include "setup.hpp"
 #include "pcbTableItem.hpp"
 #include "cpu.hpp"
 
@@ -31,6 +32,9 @@ typedef struct PriorityProcessItem {
     int *priority;
     int pcbTableIndex;
     SimulatedProcess *process;
+    bool valid;
+
+    PriorityProcessItem() : valid(false) {};
 
     bool operator<(const PriorityProcessItem& item) const {
         return priority < item.priority;

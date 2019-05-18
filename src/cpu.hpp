@@ -1,7 +1,7 @@
 #ifndef cpu_hpp
 #define cpu_hpp
 
-// #include "simulatedProcess.hpp"
+#include "setup.hpp"
 
 // Forward Declarations
 class SimulatedProcess;

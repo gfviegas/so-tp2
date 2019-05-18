@@ -20,10 +20,14 @@ PriorityProcessItem ProcessManager::runningState;
 vector<int> ProcessManager::returnTimes;
 
 ProcessManager::ProcessManager(void) {
+    pcbTable = {};
+    readyState = {};
+    blockedState = {};
+    returnTimes = {};
 }
 
 void ProcessManager::init(void) {
-		cout << green << "init do PM rodou" << reset << endl;
+	if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Init do PM rodou" << reset << endl;
 
     SimulatedProcess *firstProcess = new SimulatedProcess("R src/init");
     insertProcess(firstProcess);
@@ -34,9 +38,13 @@ void ProcessManager::init(void) {
 
 // Segundo a politica de escalonamento, parcela de quantum que o processo tem disponivel
 int remainingQuantum(PcbTableItem item) {
+    // A quantidade de Quantum que o processo tem é 2^priority.
+    int available = (1 << item.getPriority());
+    int remaining = available - item.getCpuTime();
+    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Quantum Available: " << available << ". Priority: " << item.getPriority() << reset << endl;
+    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Quantum Remaining: " << remaining << ". Cpu Time: " << item.getCpuTime() << reset << endl;
 
-	// A quantidade de Quantum que o processo tem que rodar é 2^priority.
-	return item.getCpuTime() - (1 << item.getPriority());
+	return remaining;
 }
 
 /**
@@ -46,12 +54,17 @@ int remainingQuantum(PcbTableItem item) {
 void ProcessManager::execute(void) {
 	time++;
 	cpu.nextCommand();
-    cout << "[PM] Execute: " << pcbTable[runningState.pcbTableIndex].getValue() << reset << endl;
+    int remaining = remainingQuantum(pcbTable[runningState.pcbTableIndex]);
+
+    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Execute: " << pcbTable[runningState.pcbTableIndex].getValue() << reset << endl;
 
 	//  Se o processo em execução usar a sua fatia de tempo por completo, a sua prioridade é diminuída
-	if (remainingQuantum(pcbTable[runningState.pcbTableIndex]) == 0) {
-		pcbTable[runningState.pcbTableIndex].decreasePriority();
-	}
+	if (remaining == 0) pcbTable[runningState.pcbTableIndex].decreasePriority();
+
+    // Se usou todo o quantum disponível, e estamos com a configuração de preemptivo, então tira o processo atual da CPU.
+    if (remaining <= 0 && Setup::preemptiveness == Preemptiveness::PREEMPTIVE) {
+        contextChange();
+    }
 }
 
 void ProcessManager::unblock(void) {
@@ -110,7 +123,7 @@ void ProcessManager::block(void) {
 }
 
 void ProcessManager::runCommand(char command) {
-    cout << cyan << "[PM] RECEBIDO O COMANDO " << command << reset << endl;
+    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] RECEBIDO O COMANDO " << command << reset << endl;
 	switch (command) {
 		case 'Q': return execute();
 		case 'U': return unblock();
@@ -136,6 +149,7 @@ void ProcessManager::insertProcess(SimulatedProcess* process) {
 	ppItem.pcbTableIndex = pcbTable.size() - 1;
 	ppItem.priority = &(pcbTable[ppItem.pcbTableIndex].priority);
 	ppItem.process = process;
+	ppItem.valid = true;
 	readyState.push(ppItem);
 }
 
@@ -156,7 +170,7 @@ void ProcessManager::removeProcess(int pid, SimulatedProcess* process) {
     // Erro!
     if (elementIndex == -1) {
         perror("Erro ao remover o processo!");
-				exit(1);
+		exit(1);
     }
 
     // Todos elementos depois de elementIndex devem ser reindexados em: readyState, blockedState e runningState
@@ -193,10 +207,18 @@ void ProcessManager::removeProcess(int pid, SimulatedProcess* process) {
 
 // Muda o processo que está rodando na CPU para o proximo na fila de readystate
 void ProcessManager::contextChange(void) {
+    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Context Change! ReadyState Size: " << readyState.size() << reset << endl;
+
+    // Se a fila de prontos estiver vazia, não há processos a se alternar.
+    if (readyState.empty()) return;
+
 	PriorityProcessItem ppItem = runningState;
 	PriorityProcessItem nextPpItem = readyState.top();
-	readyState.pop();
-	readyState.push(ppItem);
+    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Context Change - Current Process: " << ppItem.process << reset << endl;
+    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Context Change - Next Process: " << nextPpItem.process << reset << endl;
+
+    readyState.pop();
+	if (ppItem.valid) readyState.push(ppItem);
 
 	runningState = nextPpItem;
 	cpu.changeProcess(runningState.process, time);

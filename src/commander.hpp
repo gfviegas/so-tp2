@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <queue>
 
+#include "setup.hpp"
 #include "processManager.hpp"
 #include "interfaces/commanderInterface.hpp"
 #include "interfaces/inputSource.hpp"

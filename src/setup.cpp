@@ -33,32 +33,33 @@ void Setup::printHelp(void) {
 }
 
 void Setup::parseArguments(int argc, const char *argv[]) {
-    cout << "Argc: " << argc << endl;
-
     for (int i = 1; i < argc; i++) {
         string arg = argv[i];
-        cout << "arg: " << arg << endl;
-
-        if (arg.compare("--help") || arg.compare("-h")) {
+        if (arg.compare("--help") == 0 || arg.compare("-h") == 0) {
             printHelp();
             exit(0);
             return;
-        } else if (arg.compare("--debug") || arg.compare("-d")) {
+        } else if (arg.compare("--debug") == 0 || arg.compare("-d") == 0) {
             Setup::mode = Setup::Mode::DEBUG;
-        } else if (arg.compare("--preemptive") || arg.compare("-p")) {
+        } else if (arg.compare("--preemptive") == 0 || arg.compare("-p") == 0) {
             Setup::preemptiveness = Preemptiveness::PREEMPTIVE;
-        } else  if (arg.compare("--non-preemptive") || arg.compare("-n")) {
+        } else  if (arg.compare("--non-preemptive") == 0 || arg.compare("-n") == 0) {
             Setup::preemptiveness = Preemptiveness::NON_PREEMPTIVE;
-        } else if (arg.compare("--priority-default")) {
+        } else if (arg.compare("--priority-default") == 0) {
             Setup::politic = Politics::PRIORITY_DEFAULT;
-        } else if (arg.compare("--shortest")) {
+        } else if (arg.compare("--shortest") == 0) {
             Setup::politic = Politics::SHORTEST;
-        } else if (arg.compare("--least-used")) {
+        } else if (arg.compare("--least-used") == 0) {
             Setup::politic = Politics::LEAST_USED;
         } else {
+            cout << "Argumento inválido: " << arg << endl;
             printHelp();
             exit(0);
             return;
         }
     }
+}
+
+bool Setup::isDebug(void) {
+    return (mode == DEBUG);
 }

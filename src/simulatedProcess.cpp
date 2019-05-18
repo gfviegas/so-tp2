@@ -39,11 +39,12 @@ void SimulatedProcess::setProgram(int id, string *p, int programCounter, int val
  */
 void SimulatedProcess::readComand(void) {
     pc++;
-	  cpuTime++;
+    cpuTime++;
     int n;
     string *command = explode(program[pc], ' ');
 
-    cout << cyan << "[SP] " << command[0].at(0) << endl;
+    // TODO: Verificar se exisite command[0], command[0].at(0)
+    if (Setup::isDebug()) cout << magenta <<  "[DEBUG SP] " << command[0].at(0) << endl;
     switch (command[0].at(0)) {
         case 'S':
             n = atoi(command[1].c_str());
@@ -65,12 +66,10 @@ void SimulatedProcess::readComand(void) {
             break;
         case 'F':
             n = atoi(command[1].c_str());
-            fork(n);
+            fork(n - 1);
             break;
         case 'R':
             read(command[1]);
-            break;
-        default:
             break;
     }
 }
@@ -81,7 +80,7 @@ void SimulatedProcess::readComand(void) {
  */
 void SimulatedProcess::set(int value) {
     n = value;
-    cout << cyan << "[SP] SET: " << value << ", " << this->n << endl;
+    if (Setup::isDebug()) cout << magenta << "[DEBUG SP] SET: " << value << ", " << this->n << reset << endl;
 }
 
 /**
@@ -90,7 +89,7 @@ void SimulatedProcess::set(int value) {
  */
 void SimulatedProcess::add(int value) {
     n += value;
-    cout << cyan << "[SP] ADD: " << value << ", " << this->n << endl;
+    if (Setup::isDebug()) cout << magenta << "[DEBUG SP] ADD: " << value << ", " << this->n << reset << endl;
 }
 
 /**
@@ -99,7 +98,7 @@ void SimulatedProcess::add(int value) {
  */
 void SimulatedProcess::sub(int value) {
     n -= value;
-    cout << cyan << "[SP] SUB: " << value << ", " << this->n << endl;
+    if (Setup::isDebug()) cout << magenta << "[DEBUG SP] SUB: " << value << ", " << this->n << reset << endl;
 }
 
 /**
@@ -124,7 +123,7 @@ void SimulatedProcess::end() {
  */
 SimulatedProcess *SimulatedProcess::fork(int skip) {
     SimulatedProcess *forkedProcess = new SimulatedProcess;
-    forkedProcess->setProgram(id, program, pc + 1, n);
+    forkedProcess->setProgram(id, program, pc, n);
 
     // pula instruções do processo pai
     pc += skip;
@@ -151,8 +150,7 @@ void SimulatedProcess::read(string file) {
     string rawProgram;
     char c = stream.get();
 
-    while (stream.good())
-    {
+    while (stream.good()) {
         rawProgram += c;
         c = stream.get();
     }
@@ -160,6 +158,5 @@ void SimulatedProcess::read(string file) {
     stream.close();
 
     program = explode(rawProgram, '\n');
-
     pc = -1;
 }

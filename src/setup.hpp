@@ -25,6 +25,7 @@ class Setup {
         static Mode mode;
 
         static void parseArguments(int argc, const char *argv[]);
+        static bool isDebug(void);
 };
 
 #endif /* setup_hpp */

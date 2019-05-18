@@ -15,6 +15,6 @@ void Cpu::changeProcess(SimulatedProcess* process, int currentTime) {
 
 void Cpu::nextCommand(void) {
 	process->readComand();
-    cout << "[CPU] N: " << process->n << ", &N = " << &(process->n) << endl;
+    if (Setup::isDebug()) cout << magenta << "[DEBUG CPU] N: " << process->n << ", &N = " << &(process->n) << reset << endl;
 	processTime++;
 }
