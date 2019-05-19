@@ -1,6 +1,6 @@
 #include "commander.hpp"
 
-// Constructor
+// Construtor da classe Commander - Cria um processo pro PM, um pipe e faz o fluxo de envio de comandos entre os processos.
 Commander::Commander(InputSource is) {
 	inputSource = is;
 

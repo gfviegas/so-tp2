@@ -28,11 +28,12 @@ using namespace std;
 // Forward Declarations
 class SimulatedProcess;
 
+// Declarando
 typedef vector<PcbTableItem> PcbTable;
 
 class ProcessManager {
     private:
-        // Q - Fim de uma unidade de tempo
+        // Comando Q - Fim de uma unidade de tempo
         static void execute(void);
 
         // U - Desbloqueia o primeiro processo simulado na fila bloqueada.
