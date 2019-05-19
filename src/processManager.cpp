@@ -29,7 +29,7 @@ ProcessManager::ProcessManager(void) {
 void ProcessManager::init(void) {
 	if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Init do PM rodou" << reset << endl;
 
-    SimulatedProcess *firstProcess = new SimulatedProcess("R src/init");
+    SimulatedProcess *firstProcess = new SimulatedProcess("R programs/init");
     insertProcess(firstProcess);
 
     contextChange();
@@ -119,7 +119,7 @@ void ProcessManager::block(void) {
 		pcbTable[runningState.pcbTableIndex].increasePriority();
 	}
 
-	contextChange();
+	contextChange(true);
 }
 
 void ProcessManager::runCommand(char command) {
@@ -207,12 +207,20 @@ void ProcessManager::removeProcess(int pid, SimulatedProcess* process) {
 
 // Muda o processo que está rodando na CPU para o proximo na fila de readystate
 void ProcessManager::contextChange(void) {
-    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Context Change! ReadyState Size: " << readyState.size() << reset << endl;
+    return contextChange(false);
+}
+
+void ProcessManager::contextChange(bool forceRemove) {
+    if (runningState.process != NULL) runningState.process->cpuTime = 0;
 
     // Se a fila de prontos estiver vazia, não há processos a se alternar.
-    if (readyState.empty()) return;
+    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Context Change! ReadyState Size: " << readyState.size() << reset << endl;
+    if (readyState.empty()) {
+        if (forceRemove) runningState = {};
+        return;
+    }
 
-	PriorityProcessItem ppItem = runningState;
+    PriorityProcessItem ppItem = runningState;
 	PriorityProcessItem nextPpItem = readyState.top();
     if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Context Change - Current Process: " << ppItem.process << reset << endl;
     if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Context Change - Next Process: " << nextPpItem.process << reset << endl;

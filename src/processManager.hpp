@@ -72,6 +72,12 @@ class ProcessManager {
         // Troca de contexto
         static void contextChange(void);
 
+        /**
+         * Troca de contexto forçando a remoção do processo atual da CPU
+         * @param forceRemove Flag se é pra remover o processo rodando na CPU independente se tem ou não processos na fila de pronto
+         */
+        static void contextChange(bool forceRemove);
+
         // Construtor
         ProcessManager(void);
 

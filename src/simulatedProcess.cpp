@@ -41,6 +41,8 @@ void SimulatedProcess::readComand(void) {
     pc++;
     cpuTime++;
     int n;
+    if (program[pc].empty()) return end();
+
     string *command = explode(program[pc], ' ');
 
     // TODO: Verificar se exisite command[0], command[0].at(0)
@@ -48,29 +50,22 @@ void SimulatedProcess::readComand(void) {
     switch (command[0].at(0)) {
         case 'S':
             n = atoi(command[1].c_str());
-            set(n);
-            break;
+            return set(n);
         case 'A':
             n = atoi(command[1].c_str());
-            add(n);
-            break;
+            return add(n);
         case 'D':
             n = atoi(command[1].c_str());
-            sub(n);
-            break;
+            return sub(n);
         case 'B':
-            block();
-            break;
+            return block();
         case 'E':
-            end();
-            break;
+            return end();
         case 'F':
             n = atoi(command[1].c_str());
-            fork(n - 1);
-            break;
+            return (void) fork(n - 1);
         case 'R':
-            read(command[1]);
-            break;
+            return read(command[1]);
     }
 }
 

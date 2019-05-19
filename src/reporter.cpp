@@ -86,7 +86,7 @@ void Reporter::print(int time, PcbTable pcbtab, priority_queue<PriorityProcessIt
 
 // Calcula e imprime tempo médio de retorno dos processos
 void Reporter::end(vector<int> returnTimes) {
-    double average = (accumulate(returnTimes.begin(), returnTimes.end(), 0) / returnTimes.size());
+    double average = (returnTimes.size() > 0) ? (accumulate(returnTimes.begin(), returnTimes.end(), 0) / returnTimes.size()) : 0;
 
     // Imprimir o tempo médio do ciclo
     cout << blue << "Tempo médio do ciclo: " << green << average << reset << endl;
