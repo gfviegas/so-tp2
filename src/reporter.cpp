@@ -34,7 +34,7 @@ void Reporter::printProccess(PcbTableItem pItem) {
 
 // Imprime a fila de processos bloqueados
 void Reporter::printBlockedQueue(PcbTable pcbtab, queue<PriorityProcessItem> blockedState) {
-    for (int i = 0; i < (int) blockedState.size(); i++) {
+    while (!blockedState.empty()) {
         printProccess(pcbtab[blockedState.front().pcbTableIndex]);
         blockedState.pop();
     }
@@ -42,20 +42,26 @@ void Reporter::printBlockedQueue(PcbTable pcbtab, queue<PriorityProcessItem> blo
 
 // Imprime a fila de processos prontos a serem executados, agrupados por prioridade.
 void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProcessItem> readyState, int runningIndex){
-    int i = 0;
     // TODO: Verificar se o processo está pronto, do jeito que está, vai printar os bloqueados tbm.
+    vector<vector<PriorityProcessItem>> priorities{{}, {}, {}, {}};
 
-    while (i <= 3) {
+    while (!readyState.empty()) {
+        PriorityProcessItem p = readyState.top();
+        readyState.pop();
+
+        int priority = *(p.priority);
+        if (priority < 0 || priority > 3) continue;
+        priorities[*(p.priority)].push_back(p);
+    }
+
+    for (int i = 0; i <= 3; i++) {
         printLine(66, '-');
-        cout << blue << setw(40) << right << "Priority " << i << endl;
+        cout << blue << setw(40) << right << "Priority " << i;
         printLine(66, '-');
 
-        for (int j = 0; j < (int) pcbtab.size(); j++) {
-            if (pcbtab[j].priority == i && j != runningIndex)
-                printProccess(pcbtab[j]);
+        for (int j = 0; j < (int) priorities[i].size(); j++) {
+            printProccess(pcbtab[priorities[i][j].pcbTableIndex]);
         }
-
-        i++;
     }
 }
 
