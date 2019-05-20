@@ -1,9 +1,22 @@
+/**
+ * Interface de interação com o usuário do Módulo Commander
+ *
+ * Gustavo Viegas (3026), Bruno Marra (3029) e Heitor Passeado (3055)
+ * @author Gustavo Viegas
+ */
+
 #include "commanderInterface.hpp"
 
-void CommanderInterface::welcome(void)
-{
-	cout << endl
-		 << endl;
+// Verifica se um código é válido
+bool CommanderInterface::isCodeValid(char code) {
+    bool condition = (code == 'Q' || code == 'U' || code == 'P' || code == 'T');
+    if (!condition) cout << red << "Comando inválido! Tente novamente." << reset << endl;
+    return condition;
+}
+
+// Mostra uma mensagem de boas vindas, com os autores do trabalho
+void CommanderInterface::welcome(void) {
+	cout << endl << endl;
 	printLine();
 	cout << blue << "_____                      _   _ _           _       \n| ___ \\                    | | | (_)         | |\n| |_/ / ___ _ __ ___ ______| | | |_ _ __   __| | ___\n| ___ \\/ _ \\ '_ ` _ \\______| | | | | '_ \\ / _` |/ _ \\\n| |_/ /  __/ | | | | |     \\ \\_/ / | | | | (_| | (_) |\n\\____/ \\___|_| |_| |_|      \\___/|_|_| |_|\\__,_|\\___/\n";
 	cout << yellow << "\n \t Ao TP 2 - SO!" << reset << endl;
@@ -11,6 +24,7 @@ void CommanderInterface::welcome(void)
 	printLine();
 }
 
+// Solicita o usuário o tipo de entrada de dados que ele vai fornecer os comandos
 InputSource CommanderInterface::chooseSource(void) {
 	int choice = 0;
 
@@ -40,8 +54,8 @@ InputSource CommanderInterface::chooseSource(void) {
 	}
 }
 
-void CommanderInterface::commandsInstructions(void)
-{
+// Mostra um cabeçalho com os comandos disponíveis a serem executados
+void CommanderInterface::commandsInstructions(void) {
 	clearOutput();
 	cout << cyan << "[COMMANDER] Iniciando leitura de comandos por entrada padrão." << endl;
 	cout << green << "Q - Fim de uma unidade de tempo." << endl;
@@ -50,12 +64,7 @@ void CommanderInterface::commandsInstructions(void)
 	cout << green << "T - Imprime o tempo médio do ciclo e finaliza o sistema." << endl;
 }
 
-bool CommanderInterface::isCodeValid(char code) {
-	bool condition = (code == 'Q' || code == 'U' || code == 'P' || code == 'T');
-	if (!condition) cout << red << "Comando inválido! Tente novamente." << reset << endl;
-	return condition;
-}
-
+// Lê os comandos que o usuário inserir na saída padrão
 queue<char> CommanderInterface::readCommandFromStdIO(void) {
 	char code;
 	queue<char> codesQueue;
@@ -78,6 +87,7 @@ queue<char> CommanderInterface::readCommandFromStdIO(void) {
 	return codesQueue;
 }
 
+// Lê os comandos que o usuário inseriu em um arquivo externo
 queue<char> CommanderInterface::readCommandFromFile(void) {
 	clearOutput();
 	cout << cyan << "[COMMANDER] Iniciando leitura de comandos por arquivo." << endl;

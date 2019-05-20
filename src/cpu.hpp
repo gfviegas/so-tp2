@@ -18,9 +18,20 @@ class Cpu {
 		// Tempo que o processo atual começou a rodar no contexto atual
 		int startTime;
 
+        // Constructor
 		Cpu (void);
+
+        /**
+         * Altera o processo em execução na CPU
+         * @param process     Processo a ser executada na CPU
+         * @param currentTime Tempo atual pra definir o tempo de início do processo na CPU
+         */
 		void changeProcess(SimulatedProcess* process, int currentTime);
-		void nextCommand(void);
+
+        /**
+         * Requisita o processo a executar seu próximo comando
+         */
+        void nextCommand(void);
 };
 
 #endif /* cpu_hpp */

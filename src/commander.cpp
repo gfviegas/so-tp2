@@ -1,3 +1,11 @@
+/**
+ * Definição da classe Commander: Ponto inicial do programa. Cria um novo processo pra o PM e cria um pipe. A partir da leitura dos comandos
+ * do usuário, encaminha para o processo do PM, através do pipe, os comandos lidos.
+ *
+ * Gustavo Viegas (3026), Bruno Marra (3029) e Heitor Passeado (3055)
+ * @author Gustavo Viegas
+ */
+
 #include "commander.hpp"
 
 // Construtor da classe Commander - Cria um processo pro PM, um pipe e faz o fluxo de envio de comandos entre os processos.

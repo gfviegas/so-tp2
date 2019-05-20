@@ -1,31 +1,33 @@
+/**
+ * Módulo do Process Manager, responsável por gerenciar os processos simulados em execução
+ * com a orquestração do Commander
+ *
+ * Gustavo Viegas (3026), Bruno Marra (3029) e Heitor Passeado (3055)
+ * @author Gustavo Viegas
+ */
+
 #include "simulatedProcess.hpp"
 #include "processManager.hpp"
 
-/**
- * Inicializa um processo simulado
- */
+// Inicializa um processo simulado
 void SimulatedProcess::init(void) {
     id = ++COUNT_ID;
     masterId = -1;
     pc = -1;
     n = 0;
-	  cpuTime = 0;
+    cpuTime = 0;
 }
 
-// Constructor
+// Constructors
 SimulatedProcess::SimulatedProcess(void) {
     init();
 }
-
 SimulatedProcess::SimulatedProcess(string rawProgram) {
     init();
     program = explode(rawProgram, '\n');
 }
 
-/**
- * Seta um novo programa no sistema
- * @param {String} p programa do processo simulado
- */
+// Define um novo programa pro processo
 void SimulatedProcess::setProgram(int id, string *p, int programCounter, int value) {
     masterId = id;
     program = p;
@@ -33,10 +35,7 @@ void SimulatedProcess::setProgram(int id, string *p, int programCounter, int val
     n = value;
 }
 
-/**
- * Incrementa PC e lê um comando do processo simulado
- * @return {String} comando na posição do PC
- */
+// Incrementa PC e lê um comando do processo simulado
 void SimulatedProcess::readComand(void) {
     pc++;
     cpuTime++;
@@ -69,53 +68,35 @@ void SimulatedProcess::readComand(void) {
     }
 }
 
-/**
- * Seta o valor da variável n para o value passado (S)
- * @param {int} value novo valor
- */
+// Seta o valor da variável n para o value passado (S)
 void SimulatedProcess::set(int value) {
     n = value;
     if (Setup::isDebug()) cout << magenta << "[DEBUG SP] SET: " << value << ", " << this->n << reset << endl;
 }
 
-/**
- * Incrementa o valor da variável n pelo value passado (A)
- * @param {int} value novo valor
- */
+// Incrementa o valor da variável n pelo value passado (A)
 void SimulatedProcess::add(int value) {
     n += value;
     if (Setup::isDebug()) cout << magenta << "[DEBUG SP] ADD: " << value << ", " << this->n << reset << endl;
 }
 
-/**
- * Decrementa o valor da variável n pelo value passado (D)
- * @param {int} value novo valor
- */
+// Decrementa o valor da variável n pelo value passado (D)
 void SimulatedProcess::sub(int value) {
     n -= value;
     if (Setup::isDebug()) cout << magenta << "[DEBUG SP] SUB: " << value << ", " << this->n << reset << endl;
 }
 
-/**
- * Bloqueia ou desbloqueia um processo simulado (B)
- * @param {bool} block bloqueia ou desbloqueia processo simulado
- */
+// Bloqueia este processo simulado (B)
 void SimulatedProcess::block() {
     ProcessManager::block();
 }
 
-/**
- * Encerra o processo simulado passado por parâmetro (E)
- * @param {SimulatedProcess **} ponteiro duplo de um processo simulado
- */
+// Encerra esse processo simulado
 void SimulatedProcess::end() {
 	ProcessManager::removeCurrentProcess();
 }
 
-/**
- * Cria um novo processo simulado a partir do processo pai (F)
- * @returns {SimulatedProcess*} processo simulado
- */
+// Cria um novo processo simulado a partir do processo pai (F)
 SimulatedProcess *SimulatedProcess::fork(int skip) {
     SimulatedProcess *forkedProcess = new SimulatedProcess;
     forkedProcess->setProgram(id, program, pc, n);
@@ -131,10 +112,7 @@ SimulatedProcess *SimulatedProcess::fork(int skip) {
     return forkedProcess;
 }
 
-/**
- * Substitui o programa do processo simulado pelo arquivo passado (R)
- * @param {string} file arquivo que será lido
- */
+// Substitui o programa do processo simulado pelo arquivo passado (R)
 void SimulatedProcess::read(string file) {
     ifstream stream;
     stream.open(file.c_str());

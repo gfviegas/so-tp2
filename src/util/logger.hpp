@@ -42,9 +42,6 @@ void printLine(char character);
 void printLine(int lineSize);
 void printLine(int lineSize, char character);
 
-
-void printLineAsterisc(void);
-
 /**
  * Imprime uma linha auxiliar especial pra entrada de dados em amarelo (default do sistema)
  */

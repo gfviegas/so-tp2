@@ -26,6 +26,7 @@ ProcessManager::ProcessManager(void) {
     returnTimes = {};
 }
 
+// Inicializa o PM, configurando o primeiro processo.
 void ProcessManager::init(void) {
 	if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Init do PM rodou" << reset << endl;
 
@@ -36,7 +37,7 @@ void ProcessManager::init(void) {
 }
 
 
-// Segundo a politica de escalonamento, parcela de quantum que o processo tem disponivel
+// Calcula o quantum restante de um item, baseado na sua prioridade
 int ProcessManager::remainingQuantum(PcbTableItem item) {
     // A quantidade de Quantum que o processo tem é 2^priority.
     int available = (1 << item.getPriority());
@@ -47,10 +48,7 @@ int ProcessManager::remainingQuantum(PcbTableItem item) {
 	return remaining;
 }
 
-/**
- * Q - Fim de uma unidade de tempo
- * Executa a próxima instrução do processo simulado.
- */
+// Q - Fim de uma unidade de tempo. Executa a próxima instrução do processo simulado.
 void ProcessManager::execute(void) {
     time++;
 
@@ -72,6 +70,7 @@ void ProcessManager::execute(void) {
     if (remaining <= 0 && Setup::preemptiveness == Preemptiveness::PREEMPTIVE) contextChange();
 }
 
+// U - Desbloqueia o primeiro processo simulado na fila bloqueada.
 void ProcessManager::unblock(void) {
     if (blockedState.empty()) return;
 
@@ -85,6 +84,7 @@ void ProcessManager::unblock(void) {
 	blockedState.pop();
 }
 
+// P - Imprime o estado atual do sistema.
 void ProcessManager::print(void) {
 	pid_t forkPID = fork();
 
@@ -101,6 +101,7 @@ void ProcessManager::print(void) {
 	}
 }
 
+// T - Imprime o tempo médio do ciclo e finaliza o sistema.
 void ProcessManager::endExecution(void) {
 	pid_t forkPID = fork();
 	if (forkPID < 0 ) {
@@ -116,6 +117,7 @@ void ProcessManager::endExecution(void) {
 	}
 }
 
+// Chamado pelo SP pra atualizar blockedState e atualizar prioridades de acordo com a politica.
 void ProcessManager::block(void) {
 	blockedState.push(runningState);
 
@@ -129,6 +131,7 @@ void ProcessManager::block(void) {
     cpu.changeProcess(NULL, time);
 }
 
+// Recebe um comando e chama o método devido relacionado a este comando.
 void ProcessManager::runCommand(char command) {
     if (Setup::isDebug()) cout << magenta << "[DEBUG PM] RECEBIDO O COMANDO " << command << reset << endl;
     try {
@@ -145,6 +148,7 @@ void ProcessManager::runCommand(char command) {
 	}
 }
 
+// Insere um processo na tabela de processos e na lista de prontos.
 void ProcessManager::insertProcess(SimulatedProcess* process) {
 	PcbTableItem item(
 		process->id,
@@ -162,10 +166,40 @@ void ProcessManager::insertProcess(SimulatedProcess* process) {
 	ppItem.priority = &(pcbTable[ppItem.pcbTableIndex].priority);
 	ppItem.process = process;
 	ppItem.valid = true;
+
 	readyState.push(ppItem);
 }
 
-// Remove um processo da tabela
+// Reindexa as estruturas que armazena o pcbTableIndex após a remoção de um item
+void ProcessManager::reindexStructures(int index) {
+    if (Setup::isDebug()) cout << magenta << "Element Index " << index << reset << endl;
+
+    // Criando uma blockedState nova com valores atualizados de pcbTableIndex
+    queue<PriorityProcessItem> newBlockedQueue;
+    while (!blockedState.empty()) {
+        PriorityProcessItem pItem = blockedState.front();
+        if (Setup::isDebug()) cout << magenta << "Blocked encontrado item com index " << pItem.pcbTableIndex << reset << endl;
+
+        if (pItem.pcbTableIndex > index) pItem.pcbTableIndex--;
+        newBlockedQueue.push(pItem);
+        blockedState.pop();
+    }
+    blockedState = newBlockedQueue;
+
+    // Criando uma readyState nova com valores atualizados de pcbTableIndex
+    priority_queue<PriorityProcessItem> newReadyState;
+    while (!readyState.empty()) {
+        PriorityProcessItem pItem = readyState.top();
+        if (Setup::isDebug()) cout << magenta << "Ready encontrado item com index " << pItem.pcbTableIndex << reset << endl;
+
+        if (pItem.pcbTableIndex > index) pItem.pcbTableIndex--;
+        newReadyState.push(pItem);
+        readyState.pop();
+    }
+    readyState = newReadyState;
+}
+
+// Remove o processo atual da tabela de processos, do runningState e da CPU
 void ProcessManager::removeCurrentProcess(void) {
     int elementIndex = runningState.pcbTableIndex;
 
@@ -182,32 +216,8 @@ void ProcessManager::removeCurrentProcess(void) {
     runningState = {};
     cpu.changeProcess(NULL, time);
 
-    // // Todos elementos depois de elementIndex devem ser reindexados em: readyState e blockedState
-    if (Setup::isDebug()) cout << magenta << "Element Index " << elementIndex << reset << endl;
-
-    // Criando uma blockedState nova com valores atualizados de pcbTableIndex
-    queue<PriorityProcessItem> newBlockedQueue;
-    while (!blockedState.empty()) {
-        PriorityProcessItem pItem = blockedState.front();
-        if (Setup::isDebug()) cout << magenta << "Blocked encontrado item com index " << pItem.pcbTableIndex << reset << endl;
-
-        if (pItem.pcbTableIndex > elementIndex) pItem.pcbTableIndex--;
-        newBlockedQueue.push(pItem);
-        blockedState.pop();
-    }
-    blockedState = newBlockedQueue;
-
-    // Criando uma readyState nova com valores atualizados de pcbTableIndex
-    priority_queue<PriorityProcessItem> newReadyState;
-    while (!readyState.empty()) {
-        PriorityProcessItem pItem = readyState.top();
-        if (Setup::isDebug()) cout << magenta << "Ready encontrado item com index " << pItem.pcbTableIndex << reset << endl;
-
-        if (pItem.pcbTableIndex > elementIndex) pItem.pcbTableIndex--;
-        newReadyState.push(pItem);
-        readyState.pop();
-    }
-    readyState = newReadyState;
+    // Todos elementos depois de index devem ser reindexados em: readyState e blockedState
+    reindexStructures(elementIndex);
 }
 
 // Muda o processo que está rodando na CPU para o proximo na fila de readystate

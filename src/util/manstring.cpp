@@ -1,23 +1,29 @@
+/**
+ * Manipula strings pra auxiliar tarefas como split
+ *
+ * Gustavo Viegas (3026), Bruno Marra (3029) e Heitor Passeado (3055)
+ * @author Bruno Marra
+ */
+
 #include "manstring.hpp"
 
+// Explode uma string em diversos vetores de caracteres
 string *explode(string text, char delimiter) {
-    // Vector of string to save tokens
+    // Vetor de strings pra salvar os tokens
     vector<string> tokens;
 
-    // stringstream class check1
     stringstream check1(text);
-
     string intermediate;
 
-    // Tokenizing w.r.t. space ' '
+    // Enquanto conseguir pegar linhas pelo delimitador
     while (getline(check1, intermediate, delimiter)) {
         tokens.push_back(intermediate);
     }
 
     string *program = new string[tokens.size()];
 
-    // Printing the token vector
-    for (int i = 0; i < tokens.size(); i++)
+    // Preenchendo o programa com os tokens
+    for (size_t i = 0; i < tokens.size(); i++)
         program[i] = tokens[i];
 
     return program;

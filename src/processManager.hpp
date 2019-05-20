@@ -33,18 +33,6 @@ typedef vector<PcbTableItem> PcbTable;
 
 class ProcessManager {
     private:
-        // Comando Q - Fim de uma unidade de tempo
-        static void execute(void);
-
-        // U - Desbloqueia o primeiro processo simulado na fila bloqueada.
-        static void unblock(void);
-
-        // P - Imprime o estado atual do sistema.
-        static void print(void);
-
-        // T - Imprime o tempo médio do ciclo e finaliza o sistema.
-        static void endExecution(void);
-
         // Unidade de tempo atual.
         static int time;
 
@@ -70,25 +58,73 @@ class ProcessManager {
         static vector<int> returnTimes;
 
         /**
-        * Troca de contexto forçando a remoção do processo atual da CPU
+         * Q - Fim de uma unidade de tempo
+         * Executa a próxima instrução do processo simulado.
+         */
+        static void execute(void);
+
+        /**
+         * U - Desbloqueia o primeiro processo simulado na fila bloqueada.
+         */
+        static void unblock(void);
+
+        /**
+         * P - Imprime o estado atual do sistema.
+         */
+        static void print(void);
+
+        /**
+         * T - Imprime o tempo médio do ciclo e finaliza o sistema.
+         */
+        static void endExecution(void);
+
+        /**
+        * Muda o processo que está rodando na CPU para o proximo na fila de readystate
         */
         static void contextChange(void);
-        // static void contextChange(bool isBlock);
 
-
+        /**
+         * Calcula o quantum restante de um item, baseado na sua prioridade
+         * @param  item Item a ser consultado
+         * @return      Valor de quantum restante pro processo
+         */
         static int remainingQuantum(PcbTableItem item);
 
         // Construtor
         ProcessManager(void);
 
     public:
+        /**
+         * Inicializa o PM, configurando o primeiro processo.
+         */
         static void init(void);
+
+        /**
+         * Recebe um comando e chama o método devido relacionado a este comando.
+         * @param command Caracter representando a tarefa a ser executada pelo PM
+         */
         static void runCommand(char command);
 
+        /**
+         * Insere um processo na tabela de processos e na lista de prontos.
+         * @param process Ponteiro para o processo a ser inserido
+         */
         static void insertProcess(SimulatedProcess* process);
+
+        /**
+         * Reindexa as estruturas que armazena o pcbTableIndex após a remoção de um item
+         * @param index Índice do elemento que foi removido
+         */
+        static void reindexStructures(int index);
+
+        /**
+         * Remove o processo atual da tabela de processos, do runningState e da CPU
+         */
         static void removeCurrentProcess(void);
 
-        // Chamado pelo SP pra atualizar blockedState e atualizar prioridades de acordo com a politica.
+        /**
+         * Chamado pelo SP pra atualizar blockedState e atualizar prioridades de acordo com a politica.
+         */
         static void block(void);
 };
 

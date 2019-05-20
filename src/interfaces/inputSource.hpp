@@ -1,8 +1,8 @@
 /**
- * Definição do enum InputSource: [DESCRICAO]
+ * Definição do enum InputSource: Tipo de entrada de dados
  *
  * Gustavo Viegas (3026), Bruno Marra (3029) e Heitor Passeado (3055)
- * @author
+ * @author Gustavo Viegas
  */
 
 #ifndef inputSource_hpp

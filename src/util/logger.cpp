@@ -30,19 +30,12 @@ void printLine(int lineSize, char character) {
 	cout << reset << endl;
 }
 
-void printLineAsterisc(void) {
-		cout << endl;
-
-    for (int i = 0; i < LINE_SIZE; i++)
-		cout << "*";
-
-	cout << endl;
-}
-
+// Imprime uma linha auxiliar especial pra entrada de dados em amarelo (default do sistema)
 void promptArrow(void) {
 	cout << yellow << " > " << reset;
 }
 
+// Imprime uma linha auxiliar especial pra gerenciamento de erros
 void printError(exception& e) {
 	cout << red << "Erro: " << e.what() << endl;
 }
