@@ -49,10 +49,9 @@ void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProces
         PriorityProcessItem p = readyState.top();
         readyState.pop();
 
-        cout << red << "Found process " << p.process << " com prioridade " << *(p.priority) << endl;
-        int priority = *(p.priority);
+        int priority = pcbtab[p.pcbTableIndex].getPriority();
         if (priority < 0 || priority > 3) continue;
-        priorities[*(p.priority)].push_back(p);
+        priorities[priority].push_back(p);
     }
 
     for (int i = 0; i <= 3; i++) {

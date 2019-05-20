@@ -63,7 +63,7 @@ void SimulatedProcess::readComand(void) {
             return end();
         case 'F':
             n = atoi(command[1].c_str());
-            return (void) fork(n - 1);
+            return (void) fork(n);
         case 'R':
             return read(command[1]);
     }
@@ -120,7 +120,9 @@ SimulatedProcess *SimulatedProcess::fork(int skip) {
     SimulatedProcess *forkedProcess = new SimulatedProcess;
     forkedProcess->setProgram(id, program, pc, n);
 
-    // pula instruções do processo pai
+    if (Setup::isDebug()) cout << magenta << "[DEBUG SP] Criado o processo: " << forkedProcess << " com pid " << forkedProcess->id << reset << endl;
+
+    // Pula instruções do processo pai
     pc += skip;
 
 	// Cadastra o processo criado na tabela de processos.
