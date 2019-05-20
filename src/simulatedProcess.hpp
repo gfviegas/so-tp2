@@ -78,10 +78,19 @@ class SimulatedProcess {
     	void read(string file);
 
     public:
+        // PID do processo
     	int id;
+
+        // Valor do PC
     	int pc;
+
+        // Valor da variável manipulada
     	int n;
+
+        // PPID: o PID do Pai do processo
     	int masterId;
+
+        // Tempo de execução total na CPU do processo.
     	int cpuTime;
 
         // Constructors
@@ -92,6 +101,12 @@ class SimulatedProcess {
          * Incrementa PC e lê um comando do processo simulado
          */
     	void readComand(void);
+
+        /**
+         * Retorna o tamanho do programa
+         * @return  Inteiro representando o tamanho da string do programa.
+         */
+        int getProgramSize(void);
 };
 
 #endif /* simulatedProcess_hpp */

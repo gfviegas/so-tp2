@@ -135,3 +135,7 @@ void SimulatedProcess::read(string file) {
     program = explode(rawProgram, '\n');
     pc = -1;
 }
+
+int SimulatedProcess::getProgramSize(void) {
+    return program->size();
+}

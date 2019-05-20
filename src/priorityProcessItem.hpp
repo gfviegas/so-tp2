@@ -37,7 +37,7 @@ typedef struct PriorityProcessItem {
             case Politics::PRIORITY_DEFAULT:
                 return priority < item.priority;
             case Politics::SHORTEST:
-                return process->pc < item.process->pc;
+                return process->getProgramSize() < item.process->getProgramSize();
             case Politics::LEAST_USED:
                 return process->cpuTime < item.process->cpuTime;
         }
