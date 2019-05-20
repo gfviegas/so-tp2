@@ -183,10 +183,14 @@ void ProcessManager::removeCurrentProcess(void) {
     cpu.changeProcess(NULL, time);
 
     // // Todos elementos depois de elementIndex devem ser reindexados em: readyState e blockedState
+    if (Setup::isDebug()) cout << magenta << "Element Index " << elementIndex << reset << endl;
+
     // Criando uma blockedState nova com valores atualizados de pcbTableIndex
     queue<PriorityProcessItem> newBlockedQueue;
     while (!blockedState.empty()) {
         PriorityProcessItem pItem = blockedState.front();
+        if (Setup::isDebug()) cout << magenta << "Blocked encontrado item com index " << pItem.pcbTableIndex << reset << endl;
+
         if (pItem.pcbTableIndex > elementIndex) pItem.pcbTableIndex--;
         newBlockedQueue.push(pItem);
         blockedState.pop();
@@ -197,8 +201,10 @@ void ProcessManager::removeCurrentProcess(void) {
     priority_queue<PriorityProcessItem> newReadyState;
     while (!readyState.empty()) {
         PriorityProcessItem pItem = readyState.top();
+        if (Setup::isDebug()) cout << magenta << "Ready encontrado item com index " << pItem.pcbTableIndex << reset << endl;
+
         if (pItem.pcbTableIndex > elementIndex) pItem.pcbTableIndex--;
-        newBlockedQueue.push(pItem);
+        newReadyState.push(pItem);
         readyState.pop();
     }
     readyState = newReadyState;
