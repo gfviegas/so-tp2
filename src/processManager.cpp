@@ -37,12 +37,12 @@ void ProcessManager::init(void) {
 
 
 // Segundo a politica de escalonamento, parcela de quantum que o processo tem disponivel
-int remainingQuantum(PcbTableItem item) {
+int ProcessManager::remainingQuantum(PcbTableItem item) {
     // A quantidade de Quantum que o processo tem é 2^priority.
     int available = (1 << item.getPriority());
-    int remaining = available - item.getCpuTime();
+    int remaining = available - cpu.processTime;
     if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Quantum Available: " << available << ". Priority: " << item.getPriority() << reset << endl;
-    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Quantum Remaining: " << remaining << ". Cpu Time: " << item.getCpuTime() << reset << endl;
+    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Quantum Remaining: " << remaining << ". Cpu Time: " << cpu.processTime << reset << endl;
 
 	return remaining;
 }
@@ -52,19 +52,24 @@ int remainingQuantum(PcbTableItem item) {
  * Executa a próxima instrução do processo simulado.
  */
 void ProcessManager::execute(void) {
-	time++;
-	cpu.nextCommand();
-    int remaining = remainingQuantum(pcbTable[runningState.pcbTableIndex]);
+    time++;
 
+	cpu.nextCommand();
+
+    // Se não tiver processo na CPU, tenta pegar um pronto e não há prioridades pra mudar.
+    if (!runningState.valid) {
+        contextChange();
+        return;
+    }
+
+    int remaining = remainingQuantum(pcbTable[runningState.pcbTableIndex]);
     if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Execute: " << pcbTable[runningState.pcbTableIndex].getValue() << reset << endl;
 
 	//  Se o processo em execução usar a sua fatia de tempo por completo, a sua prioridade é diminuída
 	if (remaining == 0) pcbTable[runningState.pcbTableIndex].decreasePriority();
 
     // Se usou todo o quantum disponível, e estamos com a configuração de preemptivo, então tira o processo atual da CPU.
-    if (remaining <= 0 && Setup::preemptiveness == Preemptiveness::PREEMPTIVE) {
-        contextChange();
-    }
+    if (remaining <= 0 && Setup::preemptiveness == Preemptiveness::PREEMPTIVE) contextChange();
 }
 
 void ProcessManager::unblock(void) {
@@ -119,17 +124,24 @@ void ProcessManager::block(void) {
 		pcbTable[runningState.pcbTableIndex].increasePriority();
 	}
 
-	contextChange(true);
+    // Se não tiver nenhum processo na fila de prontos, na proxima troca de contexto, o processo atual deve estar vago.
+    runningState = {};
+    cpu.changeProcess(NULL, time);
 }
 
 void ProcessManager::runCommand(char command) {
     if (Setup::isDebug()) cout << magenta << "[DEBUG PM] RECEBIDO O COMANDO " << command << reset << endl;
-	switch (command) {
-		case 'Q': return execute();
-		case 'U': return unblock();
-		case 'P': return print();
-		case 'T': return endExecution();
-		default: throw invalid_argument("Comando inválido encaminhado para o PM");
+    try {
+        switch (command) {
+            case 'Q': return execute();
+            case 'U': return unblock();
+            case 'P': return print();
+            case 'T': return endExecution();
+            default: throw invalid_argument("Comando inválido encaminhado para o PM");
+        }
+    } catch (exception &e) {
+		printError(e);
+		exit(1);
 	}
 }
 
@@ -154,28 +166,23 @@ void ProcessManager::insertProcess(SimulatedProcess* process) {
 }
 
 // Remove um processo da tabela
-void ProcessManager::removeProcess(int pid, SimulatedProcess* process) {
-    int elementIndex = -1;
-    for (int i = 0; i < (int) pcbTable.size(); i++) {
-        if (pcbTable[i].pid == pid) {
-            elementIndex = i;
-            pcbTable.erase(pcbTable.begin() + i);
-            break;
-        }
-    }
+void ProcessManager::removeCurrentProcess(void) {
+    int elementIndex = runningState.pcbTableIndex;
+
+    // Remove da tabela de processos
+    pcbTable.erase(pcbTable.begin() + elementIndex);
+
+    // Desalocando memória do processo
+    delete runningState.process;
 
     // Como um processo foi finalizado, adicionamos o tempo atual na lista de retornos
     returnTimes.push_back(time);
 
-    // Erro!
-    if (elementIndex == -1) {
-        perror("Erro ao remover o processo!");
-		exit(1);
-    }
+    // Devemos também remover o processo da cpu e do runningState, já que ele já foi encerrado.
+    runningState = {};
+    cpu.changeProcess(NULL, time);
 
-    // Todos elementos depois de elementIndex devem ser reindexados em: readyState, blockedState e runningState
-    if (runningState.pcbTableIndex > elementIndex) runningState.pcbTableIndex--;
-
+    // // Todos elementos depois de elementIndex devem ser reindexados em: readyState e blockedState
     // Criando uma blockedState nova com valores atualizados de pcbTableIndex
     queue<PriorityProcessItem> newBlockedQueue;
     while (!blockedState.empty()) {
@@ -195,30 +202,18 @@ void ProcessManager::removeProcess(int pid, SimulatedProcess* process) {
         readyState.pop();
     }
     readyState = newReadyState;
-
-
-    // Desalocando memória do processo
-    delete process;
-    process = NULL;
-
-	// TODO: dependendo da politica de escalonamento, chamar ela pra pegar um proximo processo
-    contextChange();
 }
 
 // Muda o processo que está rodando na CPU para o proximo na fila de readystate
 void ProcessManager::contextChange(void) {
-    return contextChange(false);
-}
-
-void ProcessManager::contextChange(bool forceRemove) {
-    if (runningState.process != NULL) runningState.process->cpuTime = 0;
-
     // Se a fila de prontos estiver vazia, não há processos a se alternar.
-    if (Setup::isDebug()) cout << magenta << "[DEBUG PM] Context Change! ReadyState Size: " << readyState.size() << reset << endl;
-    if (readyState.empty()) {
-        if (forceRemove) runningState = {};
-        return;
+    if (Setup::isDebug()) {
+        cout << magenta << "[DEBUG PM] Context Change! ReadyState Size: " << readyState.size();
+        cout << ", " << readyState.top().process->id << ", " << readyState.top().valid << reset << endl;
     }
+
+    // Se não há ninguem na fila de prontos, não há o que fazer.
+    if (readyState.empty()) return;
 
     PriorityProcessItem ppItem = runningState;
 	PriorityProcessItem nextPpItem = readyState.top();

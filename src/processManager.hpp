@@ -69,14 +69,14 @@ class ProcessManager {
         // Lista com os tempos que os processos foram finalizados
         static vector<int> returnTimes;
 
-        // Troca de contexto
-        static void contextChange(void);
-
         /**
-         * Troca de contexto forçando a remoção do processo atual da CPU
-         * @param forceRemove Flag se é pra remover o processo rodando na CPU independente se tem ou não processos na fila de pronto
-         */
-        static void contextChange(bool forceRemove);
+        * Troca de contexto forçando a remoção do processo atual da CPU
+        */
+        static void contextChange(void);
+        // static void contextChange(bool isBlock);
+
+
+        static int remainingQuantum(PcbTableItem item);
 
         // Construtor
         ProcessManager(void);
@@ -86,7 +86,7 @@ class ProcessManager {
         static void runCommand(char command);
 
         static void insertProcess(SimulatedProcess* process);
-        static void removeProcess(int pid, SimulatedProcess* process);
+        static void removeCurrentProcess(void);
 
         // Chamado pelo SP pra atualizar blockedState e atualizar prioridades de acordo com a politica.
         static void block(void);

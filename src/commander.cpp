@@ -49,14 +49,19 @@ void Commander::readCommands(void) {
         codesQueue.push(codeReceived);
     }
 
-	while (!codesQueue.empty()) {
-        codeReceived = codesQueue.front();
-		if (Setup::isDebug()) cout << endl << magenta << "[DEBUG CM] Lendo código: " << codeReceived << endl;
-		ProcessManager::runCommand(codeReceived);
-        codesQueue.pop();
+    try {
+        while (!codesQueue.empty()) {
+            codeReceived = codesQueue.front();
+            if (Setup::isDebug()) cout << endl << magenta << "[" << (queueSize - codesQueue.size()) << "] - [DEBUG CM] Lendo código: " << codeReceived << endl;
+            ProcessManager::runCommand(codeReceived);
+            codesQueue.pop();
+        }
+    } catch (exception &e) {
+		printError(e);
+		exit(1);
 	}
 
-    exit(1);
+    exit(0);
 }
 
 // Método executado apenas pelo processo pai do Commander, após o fork no construtor.
@@ -82,11 +87,16 @@ void Commander::sendCommands(void) {
 	write(fd[1], &queueSize, sizeof(int));
 
 	// Enviando a fila, caracter por caracter
-    while (!codesQueue.empty()) {
-        currentCode = codesQueue.front();
-        write(fd[1], &currentCode, sizeof(char));
-        codesQueue.pop();
-    }
+    try {
+        while (!codesQueue.empty()) {
+            currentCode = codesQueue.front();
+            write(fd[1], &currentCode, sizeof(char));
+            codesQueue.pop();
+        }
+    } catch (exception &e) {
+		printError(e);
+		exit(1);
+	}
 
     wait(NULL);
 }

@@ -109,7 +109,7 @@ void SimulatedProcess::block() {
  * @param {SimulatedProcess **} ponteiro duplo de um processo simulado
  */
 void SimulatedProcess::end() {
-	ProcessManager::removeProcess(this->id, this);
+	ProcessManager::removeCurrentProcess();
 }
 
 /**

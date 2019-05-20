@@ -49,6 +49,7 @@ void Reporter::printPriorityQueue(PcbTable pcbtab, priority_queue<PriorityProces
         PriorityProcessItem p = readyState.top();
         readyState.pop();
 
+        cout << red << "Found process " << p.process << " com prioridade " << *(p.priority) << endl;
         int priority = *(p.priority);
         if (priority < 0 || priority > 3) continue;
         priorities[*(p.priority)].push_back(p);
@@ -75,7 +76,7 @@ void Reporter::print(int time, PcbTable pcbtab, priority_queue<PriorityProcessIt
 
     cout << endl << blue << "RUNNING PROCESS:" << reset << endl;
     printReporterHeader();
-    printProccess(pcbtab[runningState.pcbTableIndex]);
+    if (runningState.valid) printProccess(pcbtab[runningState.pcbTableIndex]);
     printLine(66, '-');
 
     cout << blue << "BLOCKED PROCESSES:" << reset << endl;
