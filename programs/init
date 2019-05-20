@@ -12,5 +12,5 @@ R programs/file_c
 F 1
 R programs/file_d
 F 1
-R file_e
+R programs/file_e
 E
